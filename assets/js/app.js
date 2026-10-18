@@ -702,8 +702,44 @@ if (location.hash.includes('s=')) startView = 'results';   // a shared link open
 showView(startView, { scroll: false });
 $$('.page > *').forEach((c, i) => c.style.setProperty('--i', i));
 
-/* ---------- intro: a progress bar fills while the fonts arrive, then the page deals in ---------- */
+/* ---------- access gate ----------
+   A static site cannot keep a secret: this compares a hash in the browser and
+   keeps casual visitors out, nothing more. The unlock is remembered per browser. */
+const GATE_HASH = '0c59e405607552899fe446695148d2d5d76cf66ce486d002c6206a2340560a58';
+const GATE_KEY = 'fi-roi-unlock';
+async function sha256(text) {
+  const buf = await crypto.subtle.digest('SHA-256', new TextEncoder().encode(text));
+  return [...new Uint8Array(buf)].map(b => b.toString(16).padStart(2, '0')).join('');
+}
+function gateUnlocked() { try { return localStorage.getItem(GATE_KEY) === GATE_HASH; } catch (e) { return false; } }
 (() => {
+  const gate = $('#gate'), form = $('#gateForm'), input = $('#gateInput'), err = $('#gateError'), card = $('.gate-card');
+  if (!gate || gateUnlocked() || !crypto.subtle) { gate && gate.remove(); return startIntro(); }
+  gate.hidden = false; $('#loader').hidden = true;
+  setTimeout(() => input.focus(), 350);
+  form.addEventListener('submit', async e => {
+    e.preventDefault();
+    const ok = (await sha256(input.value.trim())) === GATE_HASH;
+    if (!ok) {
+      err.hidden = false; input.select();
+      card.classList.remove('shake'); void card.offsetWidth; card.classList.add('shake');
+      return;
+    }
+    try { localStorage.setItem(GATE_KEY, GATE_HASH); } catch (e2) { /* ignore */ }
+    err.hidden = true; card.classList.add('ok');
+    $('#loader').hidden = false;
+    gate.classList.add('done');
+    setTimeout(() => gate.remove(), 700);
+    startIntro();
+  });
+})();
+$('#lockBtn').addEventListener('click', () => {
+  try { localStorage.removeItem(GATE_KEY); } catch (e) { /* ignore */ }
+  toast('Locked – the access code is required again on the next visit');
+});
+
+/* ---------- intro: a progress bar fills while the fonts arrive, then the page deals in ---------- */
+function startIntro() {
   const loader = $('#loader'), fill = $('#loaderFill'), pct = $('#loaderPct'), label = $('#loaderLabel');
   const ready = () => { document.body.classList.add('ready'); requestAnimationFrame(syncScenSwitches); };
   if (!loader) return ready();
@@ -733,4 +769,4 @@ $$('.page > *').forEach((c, i) => c.style.setProperty('--i', i));
     if ((t >= minMs && fontsDone) || t >= maxMs) finish(); else setTimeout(tick, 32);
   };
   tick();
-})();
+}

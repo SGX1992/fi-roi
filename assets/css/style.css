@@ -529,3 +529,26 @@ details.mech[open] summary{color:#fff}
   .loader.done .loader-mark{transform:translateY(-8px);transition:transform .6s cubic-bezier(.22,.9,.25,1)}
 }
 @media print{.loader{display:none}}
+
+
+/* ---------- access gate ---------- */
+.gate{position:fixed;inset:0;z-index:110;display:flex;align-items:center;justify-content:center;padding:24px;background:var(--bg);transition:opacity .5s ease,visibility 0s linear .5s}
+.gate.done{opacity:0;visibility:hidden;pointer-events:none}
+.gate-card{width:min(420px,100%);display:flex;flex-direction:column;gap:14px;background:var(--card);border:1px solid var(--line);border-radius:var(--radius);padding:32px 28px 28px;
+  box-shadow:0 0 0 1px rgba(255,255,255,.04),0 30px 90px rgba(0,0,0,.85),0 0 44px -10px rgba(var(--accent-rgb),.22),0 0 130px -34px rgba(var(--accent-rgb),.16)}
+.gate-mark{width:128px;height:auto;display:block;margin-bottom:8px}
+.gate-card h1{font-size:22px;font-weight:600;letter-spacing:-.01em}
+.gate-card p{color:var(--text-dim);font-size:14px;line-height:1.5}
+.gate-field{display:flex;gap:8px;margin-top:6px}
+.gate-field input{flex:1;min-width:0;background:var(--input-bg);border:1px solid var(--input-border);border-radius:999px;color:var(--text);font-family:var(--font);font-size:16px;padding:12px 18px;outline:none;letter-spacing:.08em;transition:border-color .18s,box-shadow .18s}
+.gate-field input:focus{border-color:var(--accent);box-shadow:0 0 0 3px rgba(var(--accent-rgb),.14)}
+.gate-field input::placeholder{color:#4A4A4A;letter-spacing:0}
+.gate-error{color:var(--neg)!important;font-size:13px!important}
+.gate-card.shake{animation:gate-shake .45s cubic-bezier(.36,.07,.19,.97)}
+.gate-card.ok{border-color:var(--accent-edge)}
+@keyframes gate-shake{10%,90%{transform:translateX(-1px)}20%,80%{transform:translateX(2px)}30%,50%,70%{transform:translateX(-4px)}40%,60%{transform:translateX(4px)}}
+@media (prefers-reduced-motion: no-preference){
+  .gate-card{animation:loader-in .7s cubic-bezier(.22,.9,.25,1) both}
+  .gate.done .gate-card{transform:translateY(-10px) scale(.98);transition:transform .5s cubic-bezier(.22,.9,.25,1)}
+}
+@media print{.gate{display:none}}

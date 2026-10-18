@@ -11,9 +11,22 @@
 <meta property="og:description" content="What does sustainability management cost you today – and how much time and money could Footprint Intelligence save?">
 <meta property="og:url" content="https://roi.footprint-intelligence.com/">
 <link rel="icon" href="assets/img/favicon.png">
-<link rel="stylesheet" href="assets/css/style.css?v=3">
+<link rel="stylesheet" href="assets/css/style.css?v=6">
 </head>
 <body>
+<div class="gate" id="gate" hidden>
+  <form class="gate-card" id="gateForm" autocomplete="off">
+    <img src="assets/img/fi-wordmark.png" alt="Footprint Intelligence" class="gate-mark">
+    <h1>ROI Calculator</h1>
+    <p>This tool is for Footprint Intelligence and its partners. Enter the access code to continue.</p>
+    <label class="gate-field">
+      <span class="sr-only">Access code</span>
+      <input type="password" id="gateInput" placeholder="Access code" autocomplete="current-password" autocapitalize="off" spellcheck="false" required>
+      <button class="cta" type="submit">Enter</button>
+    </label>
+    <p class="gate-error" id="gateError" role="alert" hidden>That code is not right. Please try again.</p>
+  </form>
+</div>
 <div class="loader" id="loader" aria-hidden="true">
   <img src="assets/img/fi-wordmark.png" alt="" class="loader-mark">
   <div class="loader-bar"><i id="loaderFill"></i></div>
@@ -352,7 +365,7 @@
 
   <footer class="foot">
     <span>© Footprint Intelligence GmbH · <a href="https://www.footprint-intelligence.com" target="_blank" rel="noopener">footprint-intelligence.com</a></span>
-    <span>Your inputs stay in this browser and in the link you copy – nothing is sent to a server.</span>
+    <span>Your inputs stay in this browser and in the link you copy – nothing is sent to a server. <button class="btn-link no-print" id="lockBtn" type="button">Lock this browser</button></span>
   </footer>
 </div>
 
@@ -374,6 +387,6 @@
 </div>
 <div class="toast" id="toast" role="status" aria-live="polite"></div>
 
-<script type="module" src="assets/js/app.js?v=5"></script>
+<script type="module" src="assets/js/app.js?v=6"></script>
 </body>
 </html>
