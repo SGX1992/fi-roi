@@ -1,0 +1,8 @@
+# Not indexed on purpose. These are four thin utility pages whose only job is to
+# make a poster — indexed, they would compete in search with the real event
+# pages on footprint-intelligence.com, which is where people should land.
+#
+# Nothing here is secret: delete this file and the noindex meta in index.html
+# if you ever want the tool findable.
+User-agent: *
+Disallow: /

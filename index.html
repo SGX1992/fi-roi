@@ -1,0 +1,354 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>ROI Calculator | Footprint Intelligence</title>
+<meta name="description" content="What does sustainability management cost you today – and how much time and money could Footprint Intelligence save? Enter your figures and get time saved, net benefit, 3-year ROI and payback.">
+<meta name="robots" content="noindex, nofollow">
+<meta property="og:type" content="website">
+<meta property="og:title" content="ROI Calculator | Footprint Intelligence">
+<meta property="og:description" content="What does sustainability management cost you today – and how much time and money could Footprint Intelligence save?">
+<meta property="og:url" content="https://roi.footprint-intelligence.com/">
+<link rel="icon" href="assets/img/favicon.png">
+<link rel="stylesheet" href="assets/css/style.css?v=1">
+</head>
+<body>
+<div class="page">
+
+  <header class="topbar">
+    <a class="brand" href="https://www.footprint-intelligence.com" target="_blank" rel="noopener">
+      <img src="assets/img/fi-wordmark.png" alt="Footprint Intelligence" class="brand-mark">
+      <span class="brand-sep" aria-hidden="true"></span>
+      <span class="brand-title">ROI Calculator<small>Business case for Footprint Intelligence</small></span>
+    </a>
+    <div class="no-print" style="display:flex;gap:10px;align-items:center">
+      <button class="cta cta--ghost cta--sm" id="shareBtn" type="button" title="Copy a link that contains all your inputs">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/></svg>
+        Copy link
+      </button>
+      <button class="btn-link" id="resetBtn" type="button">Reset to defaults</button>
+    </div>
+  </header>
+
+  <section class="hero">
+    <h1>What does sustainability management cost you today – and how much could Footprint Intelligence save?</h1>
+    <p>Enter your company profile, people and current costs, review the hours per activity, and get a management summary: time saved, net benefit, 3-year ROI, payback and scenarios. Start with the defaults for a quick estimate in 2 minutes, then refine the activities for a detailed assessment.</p>
+  </section>
+
+  <nav class="steps no-print" role="tablist" aria-label="Steps">
+    <button class="step" role="tab" id="tab-inputs" aria-controls="view-inputs" aria-selected="true" data-view="inputs" type="button"><i>1</i>Inputs</button>
+    <button class="step" role="tab" id="tab-activities" aria-controls="view-activities" aria-selected="false" data-view="activities" type="button"><i>2</i>Activities</button>
+    <button class="step" role="tab" id="tab-results" aria-controls="view-results" aria-selected="false" data-view="results" type="button"><i>3</i>Results</button>
+  </nav>
+
+  <!-- ===================== STEP 1: INPUTS ===================== -->
+  <section class="view" id="view-inputs" role="tabpanel" aria-labelledby="tab-inputs">
+    <div class="view-head">
+      <div>
+        <h2>Step 1 of 3 – Inputs</h2>
+        <p>Enter your figures in the marked fields; everything else is calculated. All defaults are typical values and can be changed.</p>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-head"><span class="num">1</span><h3>Company profile &amp; approach</h3></div>
+      <div class="grid grid-2">
+        <label class="field"><span>Company name</span>
+          <div class="control is-input"><input type="text" data-k="company" maxlength="60" autocomplete="organization"></div>
+          <small>Shown on the Results page</small></label>
+        <label class="field"><span>Current approach</span>
+          <div class="control is-input"><select data-k="approach" id="approachSel"></select></div>
+          <small>How sustainability data is managed today</small></label>
+        <label class="field"><span>Share of FI savings already covered by your current tool</span>
+          <div class="control is-input has-unit"><input type="number" data-k="covered" data-pct min="0" max="100" step="1" inputmode="decimal"><span class="unit">%</span></div>
+          <small>0% for Manual / Excel. If you already use software, estimate how much of the automation it already provides (e.g. 30–50%). Avoids crediting FI for capabilities you already have.</small></label>
+        <label class="field"><span>Data collection rounds per year</span>
+          <div class="control is-input"><select data-k="rounds" id="roundsSel"></select></div>
+          <small>1 = annual, 2 = semi-annual, 4 = quarterly, 12 = monthly</small></label>
+        <label class="field span-2"><span>Scenario shown in headline results</span>
+          <div class="control is-input"><select data-k="scenario" id="scenarioSel"></select></div>
+          <small>Conservative / Expected / Optimistic – all three are compared on the Results page</small></label>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-head"><span class="num">2</span><h3>Complexity</h3></div>
+      <div class="grid grid-3">
+        <label class="field"><span>Legal entities in scope</span><div class="control is-input"><input type="number" data-k="entities" min="0" step="1" inputmode="numeric"></div><small>Companies / subsidiaries included in reporting</small></label>
+        <label class="field"><span>Sites / locations</span><div class="control is-input"><input type="number" data-k="sites" min="0" step="1" inputmode="numeric"></div><small>Offices, plants, warehouses that deliver data</small></label>
+        <label class="field"><span>Reporting frameworks &amp; standards</span><div class="control is-input"><input type="number" data-k="frameworks" min="0" step="1" inputmode="numeric"></div><small>e.g. GHG Protocol, CSRD / ESRS, VSME, CDP, EcoVadis, SBTi</small></label>
+        <label class="field"><span>Customer &amp; supplier questionnaires answered per year</span><div class="control is-input"><input type="number" data-k="questionnaires" min="0" step="1" inputmode="numeric"></div><small>Sustainability questionnaires, ratings and tender requests</small></label>
+        <label class="field"><span>Key suppliers asked for data per year</span><div class="control is-input"><input type="number" data-k="suppliers" min="0" step="1" inputmode="numeric"></div><small>Suppliers asked for emissions or ESG data</small></label>
+        <label class="field"><span>Products requiring a product carbon footprint (PCF) per year</span><div class="control is-input"><input type="number" data-k="products" min="0" step="1" inputmode="numeric"></div><small>Only used if the PCF module is in scope</small></label>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-head"><span class="num">3</span><h3>Modules in scope</h3></div>
+      <div id="modules"></div>
+      <p class="card-note">Core data management and reporting activities are always included.</p>
+    </div>
+
+    <div class="card">
+      <div class="card-head"><span class="num">4</span><div><h3>People involved &amp; internal cost per hour</h3><p>Fully loaded cost per hour = avg. gross salary × (1 + employer on-costs) ÷ productive hours per year</p></div></div>
+      <div class="table-wrap">
+        <table id="rolesTable">
+          <thead><tr>
+            <th>Role</th><th class="r">People involved</th><th class="r">Avg. annual gross salary</th><th class="r">Employer on-costs</th><th class="r">Productive hours / person / year</th><th class="r">Fully loaded cost per hour</th>
+          </tr></thead>
+          <tbody></tbody>
+        </table>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-head"><span class="num">5</span><h3>Annual external costs</h3></div>
+      <div class="table-wrap">
+        <table id="extTable">
+          <thead><tr><th>Cost item</th><th class="r">Today (€ / year)</th><th class="r">Still needed with FI</th><th class="r">With FI (€ / year)</th><th>Note</th></tr></thead>
+          <tbody></tbody>
+        </table>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-head"><span class="num">6</span><h3>One-time transition costs (year 1)</h3></div>
+      <div class="table-wrap">
+        <table id="oneTimeTable">
+          <thead><tr><th>Item</th><th class="r">Input</th><th class="r">Cost (€)</th><th>Note</th></tr></thead>
+          <tbody></tbody>
+        </table>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-head"><span class="num">7</span><h3>Ramp-up</h3></div>
+      <div class="grid grid-2">
+        <label class="field"><span>Share of steady-state time savings achieved in year 1</span>
+          <div class="control is-input has-unit"><input type="number" data-k="rampUp" data-pct min="0" max="100" step="1" inputmode="decimal"><span class="unit">%</span></div>
+          <small>Year 1 includes setup and learning. Reusable mappings and configured imports deliver full savings from year 2.</small></label>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-head"><span class="num">8</span><div><h3>Optional: compare with an alternative software</h3><p>Used only in the “Footprint Intelligence vs. alternative software” table on the Results page.</p></div></div>
+      <div class="grid grid-2">
+        <label class="field"><span>Alternative software annual licence</span><div class="control is-input has-prefix has-unit"><span class="prefix">€</span><input type="number" data-k="alt.licence" min="0" step="100" inputmode="numeric"><span class="unit">/ year</span></div><small>Annual price of the other tool you are considering</small></label>
+        <label class="field"><span>Alternative software one-time implementation</span><div class="control is-input has-prefix"><span class="prefix">€</span><input type="number" data-k="alt.oneTime" min="0" step="100" inputmode="numeric"></div><small>Setup or onboarding fee of the other tool</small></label>
+        <label class="field"><span>Share of FI's time savings the alternative achieves</span><div class="control is-input has-unit"><input type="number" data-k="alt.share" data-pct min="0" max="100" step="1" inputmode="decimal"><span class="unit">%</span></div><small>e.g. 60% if it automates fewer activities (no AI extraction, drafting or questionnaire agents)</small></label>
+        <label class="field"><span>Additional external costs with the alternative</span><div class="control is-input has-prefix has-unit"><span class="prefix">€</span><input type="number" data-k="alt.extra" min="0" step="100" inputmode="numeric"><span class="unit">/ year</span></div><small>e.g. separate emission factor database or consulting not included in the other tool</small></label>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-head"><h3>How the calculation works</h3></div>
+      <div class="how">
+        <div><b>Cost per hour</b><span>Avg. gross salary × (1 + employer on-costs) ÷ productive hours per year</span></div>
+        <div><b>Time value saved</b><span>(Hours today − hours with FI) × cost per hour, per activity</span></div>
+        <div><b>Current annual cost</b><span>Internal staff time + software + factor databases + external services</span></div>
+        <div><b>Annual cost with FI</b><span>Remaining internal time + FI subscription + remaining external costs</span></div>
+        <div><b>Year-1 net benefit</b><span>Time value × ramp-up share + cash savings − FI subscription − one-time transition costs</span></div>
+        <div><b>3-year ROI</b><span>(3-year cost today − 3-year cost with FI) ÷ 3-year cost with FI</span></div>
+        <div><b>Payback</b><span>First month in which the cumulative net benefit turns positive</span></div>
+      </div>
+      <div class="legend-colours">
+        <span><i class="in"></i>Input – enter or change these values</span>
+        <span><i class="calc"></i>Calculated – formulas, nothing to change</span>
+        <span><i class="bench"></i>Benchmark – typical default values, driven by your inputs</span>
+      </div>
+    </div>
+
+    <div class="no-print" style="display:flex;justify-content:flex-end">
+      <button class="cta" type="button" data-goto="activities">Next: review activities <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14m-6-6 6 6-6 6"/></svg></button>
+    </div>
+  </section>
+
+  <!-- ===================== STEP 2: ACTIVITIES ===================== -->
+  <section class="view" id="view-activities" role="tabpanel" aria-labelledby="tab-activities" hidden>
+    <div class="view-head">
+      <div>
+        <h2>Step 2 of 3 – Activities</h2>
+        <p>Hours today are benchmarks driven by your inputs. Overwrite them in the “Your estimate” field, and adjust who does the work and the expected reduction if needed.</p>
+      </div>
+      <div class="scen-switch no-print" id="scenSwitch2" aria-label="Scenario"></div>
+    </div>
+
+    <div class="card">
+      <div class="table-wrap">
+        <table id="actTable">
+          <thead><tr>
+            <th>#</th>
+            <th>Activity · how Footprint Intelligence helps</th>
+            <th>Module</th>
+            <th>Done by</th>
+            <th class="r">Hours today / year</th>
+            <th class="r">Expected time reduction with FI</th>
+            <th class="r">Applied reduction*</th>
+            <th class="r">Hours with FI / year</th>
+            <th class="r">Hours saved / year</th>
+            <th class="r">Cost per hour</th>
+            <th class="r">Value of time released (€ / year)</th>
+          </tr></thead>
+          <tbody></tbody>
+          <tfoot></tfoot>
+        </table>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-head"><h3>How to read this table</h3></div>
+      <ul class="prose">
+        <li>Benchmark hours = fixed hours + hours per unit × units. Units come from your Inputs (e.g. 10 locations × 1 round = 10 units). Open “Benchmark” under an activity to see how its hours are built.</li>
+        <li>If you know your actual effort, enter it in “Your estimate” – it replaces the benchmark. Activities outside the selected modules count as 0.</li>
+        <li>Expected reductions reflect what remains with FI: preparation, review, exception handling and administration. Human review and approval remain part of every workflow.</li>
+        <li>*Applied reduction = reduction of the selected scenario × (1 − share already covered by your current tool), so existing capabilities are not credited twice.</li>
+        <li>Saved hours are released capacity. They only reduce cash costs if they replace staffing or external spend.</li>
+        <li>Only the “Expected” reduction is entered per activity. Conservative and Optimistic apply the scenario factors <span id="factorNote"></span> (capped at 95%).</li>
+      </ul>
+    </div>
+
+    <div class="no-print" style="display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap">
+      <button class="cta cta--ghost" type="button" data-goto="inputs"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M19 12H5m6 6-6-6 6-6"/></svg> Back to inputs</button>
+      <button class="cta" type="button" data-goto="results">See results <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14m-6-6 6 6-6 6"/></svg></button>
+    </div>
+  </section>
+
+  <!-- ===================== STEP 3: RESULTS ===================== -->
+  <section class="view" id="view-results" role="tabpanel" aria-labelledby="tab-results" hidden>
+    <div class="view-head">
+      <div>
+        <h2 id="resTitle">Business case: Footprint Intelligence</h2>
+        <p id="resSub"></p>
+      </div>
+      <div style="display:flex;gap:10px;align-items:center;flex-wrap:wrap" class="no-print">
+        <div class="scen-switch" id="scenSwitch3" aria-label="Scenario"></div>
+        <button class="cta cta--ghost cta--sm" id="printBtn" type="button">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 9V3h12v6"/><rect x="3" y="9" width="18" height="9" rx="2"/><path d="M6 15h12v6H6z"/></svg>
+          Print / PDF
+        </button>
+      </div>
+    </div>
+
+    <div class="kpis">
+      <div class="kpi"><div class="k-label">Time saved per year</div><div class="k-value" id="kHours"></div><div class="k-sub" id="kHoursSub"></div></div>
+      <div class="kpi kpi--hero"><div class="k-label">Recurring annual net benefit</div><div class="k-value" id="kNet"></div><div class="k-sub">per year from year 2 (capacity + cash)</div></div>
+      <div class="kpi"><div class="k-label">3-year ROI</div><div class="k-value" id="kRoi"></div><div class="k-sub">(3-yr cost today − 3-yr cost with FI) ÷ 3-yr cost with FI</div></div>
+      <div class="kpi"><div class="k-label">Payback period</div><div class="k-value" id="kPayback"></div><div class="k-sub">incl. one-time transition costs</div></div>
+    </div>
+
+    <div class="card">
+      <div class="card-head"><h3>Annual view</h3></div>
+      <div class="table-wrap"><table id="annualTable">
+        <thead><tr><th>Item</th><th class="r">Year 1</th><th class="r">Year 2 onwards</th><th>Explanation</th></tr></thead>
+        <tbody></tbody>
+      </table></div>
+    </div>
+
+    <div class="card">
+      <div class="card-head"><h3>3-year business case</h3></div>
+      <div class="table-wrap"><table id="threeYearTable">
+        <thead><tr><th>3-year view (savings vs. investment)</th><th class="r">Year 1</th><th class="r">Years 2–3</th><th class="r">Total 3 years</th></tr></thead>
+        <tbody></tbody>
+      </table></div>
+      <div class="ratios">
+        <div class="ratio"><div class="r-value" id="rRoi"></div><div class="r-label">3-year ROI (difference ÷ 3-year cost with FI)</div></div>
+        <div class="ratio"><div class="r-value" id="rPerEuro"></div><div class="r-label">Net benefit per €1 spent on Footprint Intelligence (subscription + one-time)</div></div>
+        <div class="ratio"><div class="r-value" id="rBreakEven"></div><div class="r-label">Break-even: FI pays for itself (from year 2) at this share of the expected time savings</div></div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-head"><div><h3>Return on investment: cumulative net benefit over 36 months</h3><p>Month after go-live – break-even where the line crosses zero</p></div></div>
+      <div class="chart" id="chartCum"></div>
+    </div>
+
+    <div class="card">
+      <div class="card-head"><h3>Scenario comparison</h3></div>
+      <div class="table-wrap"><table id="scenTable">
+        <thead><tr><th>Metric</th><th class="r">Conservative</th><th class="r">Expected</th><th class="r">Optimistic</th></tr></thead>
+        <tbody></tbody>
+      </table></div>
+    </div>
+
+    <div class="grid grid-2" id="chartsRow">
+      <div class="card">
+        <div class="card-head"><h3>3 years: benefits vs. investment in Footprint Intelligence</h3></div>
+        <div class="chart" id="chartBars"></div>
+      </div>
+      <div class="card">
+        <div class="card-head"><h3>Hours per year by activity</h3></div>
+        <div class="chart" id="chartHours"></div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-head"><div><h3>Footprint Intelligence vs. alternative software</h3><p>3 years, selected scenario</p></div></div>
+      <div class="table-wrap"><table id="altTable">
+        <thead><tr><th>3-year view vs. alternative software</th><th class="r">Alternative software</th><th class="r">With Footprint Intelligence</th><th class="r">Advantage FI</th></tr></thead>
+        <tbody></tbody>
+      </table></div>
+      <p class="card-note">The alternative is assumed to cover the same scope and to deliver the share of FI's time savings entered in Inputs section 8. Positive advantage = Footprint Intelligence delivers more net benefit.</p>
+    </div>
+
+    <div class="grid grid-2">
+      <div class="card">
+        <div class="card-head"><h3>Additional value – not included in the figures above</h3></div>
+        <ul class="prose">
+          <li>Reuse across frameworks: the same data serves CSRD/ESRS, VSME, CDP, EcoVadis and customer requests without re-collecting it.</li>
+          <li>Scalability: more entities, locations and reporting requests without a proportional increase in workload.</li>
+          <li>Tool consolidation: further software, databases or services may be replaced – only include them above where cancellation is realistic.</li>
+          <li>Decarbonization: identification and prioritization of reduction measures, including their financial implications.</li>
+          <li>Management decisions: faster access to consistent, traceable sustainability figures.</li>
+          <li>Risk and assurance: audit trail and central evidence reduce the risk of findings and rework.</li>
+        </ul>
+        <p class="prose" style="margin-top:12px">These effects are real but customer-specific. Add them to the business case only where you can substantiate them.</p>
+      </div>
+      <div class="card">
+        <div class="card-head"><h3>Key modelling principles</h3></div>
+        <ul class="prose">
+          <li>Equivalent scope: today's effort and the FI scenario cover the same modules, entities and frameworks.</li>
+          <li>No double counting: capabilities already provided by your current tool are credited and each activity is counted once.</li>
+          <li>Capacity vs. cash: saved time is shown as released capacity; only reduced external spend is a cash saving.</li>
+          <li>Human review: AI-assisted steps keep review and approval with your team – the remaining hours with FI include this effort.</li>
+          <li>Factor updates preserve reporting-year consistency; regulatory support supplements but does not replace your own assessment.</li>
+          <li>All figures are estimates based on your inputs and typical benchmarks. They are not a guarantee of savings.</li>
+        </ul>
+      </div>
+    </div>
+
+    <p class="disclaimer">This calculator provides an indicative estimate based on your inputs and typical benchmarks. It is not a binding offer or a guarantee of savings. Footprint Intelligence pricing is based on your individual offer.</p>
+
+    <div class="no-print" style="display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap">
+      <button class="cta cta--ghost" type="button" data-goto="activities"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M19 12H5m6 6-6-6 6-6"/></svg> Back to activities</button>
+      <a class="cta" href="https://www.footprint-intelligence.com/contact" target="_blank" rel="noopener" style="border:none">Discuss your business case with us</a>
+    </div>
+  </section>
+
+  <footer class="foot">
+    <span>© Footprint Intelligence GmbH · <a href="https://www.footprint-intelligence.com" target="_blank" rel="noopener">footprint-intelligence.com</a></span>
+    <span>Your inputs stay in this browser and in the link you copy – nothing is sent to a server.</span>
+  </footer>
+</div>
+
+<!-- live headline, like the poster tool's action bar -->
+<div class="dock no-print" id="dock">
+  <div class="dock-in">
+    <div class="dock-kpis">
+      <div class="dock-kpi"><span>Time saved / year</span><b id="dHours">–</b></div>
+      <div class="dock-kpi"><span>Net benefit / year</span><b id="dNet">–</b></div>
+      <div class="dock-kpi"><span>3-year ROI</span><b id="dRoi">–</b></div>
+      <div class="dock-kpi"><span>Payback</span><b id="dPayback">–</b></div>
+    </div>
+    <span class="scen">Scenario: <b id="dScen"></b></span>
+    <div class="dock-actions">
+      <button class="cta cta--ghost cta--sm" type="button" id="dockPrint">Print / PDF</button>
+      <button class="cta cta--sm" type="button" id="dockResults" data-goto="results">See results →</button>
+    </div>
+  </div>
+</div>
+<div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+<script type="module" src="assets/js/app.js?v=1"></script>
+</body>
+</html>
