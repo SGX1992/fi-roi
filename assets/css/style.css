@@ -371,7 +371,7 @@ details.mech[open] summary{color:#fff}
   .step:hover i{transform:scale(1.12) rotate(-6deg)}
 
   .scen-switch::before{content:"";position:absolute;top:4px;bottom:4px;left:4px;width:var(--pill-w,0px);transform:translateX(var(--pill-x,0px));background:var(--accent);border-radius:999px;transition:transform .34s cubic-bezier(.22,.9,.25,1),width .34s cubic-bezier(.22,.9,.25,1)}
-  .scen-switch button[aria-pressed="true"]{background:transparent}
+  .scen-switch.measured button[aria-pressed="true"]{background:transparent}
   .scen-switch button{transition:color .22s,transform .2s}
   .scen-switch button:hover[aria-pressed="false"]{transform:translateY(-1px)}
 

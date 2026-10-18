@@ -322,7 +322,8 @@ function syncScenSwitches() {
     const btns = $$('button', box);
     btns.forEach(b => b.setAttribute('aria-pressed', String(b.textContent === state.scenario)));
     const on = btns.find(b => b.textContent === state.scenario);
-    if (on) { box.style.setProperty('--pill-w', on.offsetWidth + 'px'); box.style.setProperty('--pill-x', (on.offsetLeft - 4) + 'px'); }
+    /* a hidden switch measures 0 – leave it unmeasured and the button keeps its own fill */
+    if (on && on.offsetWidth > 0) { box.classList.add('measured'); box.style.setProperty('--pill-w', on.offsetWidth + 'px'); box.style.setProperty('--pill-x', (on.offsetLeft - 4) + 'px'); }
   }
 }
 
@@ -602,7 +603,8 @@ function showView(name, { scroll = true } = {}) {
   $('.steps').dataset.view = name;
   $('#dockResults').textContent = name === 'results' ? 'Edit inputs' : 'See results →';
   $('#dockResults').dataset.goto = name === 'results' ? 'inputs' : 'results';
-  if (name === 'results') { for (const k of Object.keys(charts)) charts[k].cur = null; drawCharts(); syncScenSwitches(); }
+  if (name === 'results') { for (const k of Object.keys(charts)) charts[k].cur = null; drawCharts(); }
+  requestAnimationFrame(syncScenSwitches);
   if (scroll) window.scrollTo({ top: Math.max(0, $('.steps').getBoundingClientRect().top + window.scrollY - 16), behavior: reduced ? 'auto' : 'smooth' });
   try { sessionStorage.setItem('fi-roi-view', name); } catch (e) { /* ignore */ }
 }
