@@ -701,7 +701,36 @@ try { startView = sessionStorage.getItem('fi-roi-view') || 'inputs'; } catch (e)
 if (location.hash.includes('s=')) startView = 'results';   // a shared link opens on the business case
 showView(startView, { scroll: false });
 $$('.page > *').forEach((c, i) => c.style.setProperty('--i', i));
-(document.fonts ? document.fonts.ready : Promise.resolve()).then(() => {
-  document.body.classList.add('ready');
-  requestAnimationFrame(syncScenSwitches);
-});
+
+/* ---------- intro: a progress bar fills while the fonts arrive, then the page deals in ---------- */
+(() => {
+  const loader = $('#loader'), fill = $('#loaderFill'), pct = $('#loaderPct'), label = $('#loaderLabel');
+  const ready = () => { document.body.classList.add('ready'); requestAnimationFrame(syncScenSwitches); };
+  if (!loader) return ready();
+  if (reduced) { loader.remove(); return ready(); }
+  let seen = false;
+  try { seen = sessionStorage.getItem('fi-roi-seen') === '1'; sessionStorage.setItem('fi-roi-seen', '1'); } catch (e) { /* ignore */ }
+  const minMs = seen ? 420 : 1250, maxMs = 3000, t0 = performance.now();
+  const labels = ['Preparing your business case', 'Loading benchmarks', 'Warming up the scenario engine', 'Almost there'];
+  let fontsDone = false, finished = false;
+  (document.fonts ? document.fonts.ready : Promise.resolve()).then(() => { fontsDone = true; });
+  const finish = () => {
+    if (finished) return; finished = true;
+    fill.style.width = '100%'; pct.textContent = '100%'; label.textContent = 'Ready';
+    setTimeout(() => {
+      loader.classList.add('done'); ready();
+      loader.addEventListener('transitionend', () => loader.remove(), { once: true });
+      setTimeout(() => loader.remove(), 1200);
+    }, 260);
+  };
+  const tick = () => {
+    if (finished) return;
+    const t = performance.now() - t0;
+    /* ease toward 92% over the minimum time, hold there until the fonts are in */
+    const p = Math.min(.92, .92 * (1 - Math.pow(1 - Math.min(1, t / minMs), 3)));
+    fill.style.width = (p * 100).toFixed(1) + '%'; pct.textContent = Math.round(p * 100) + '%';
+    if (!seen) label.textContent = labels[Math.min(labels.length - 1, Math.floor(t / (minMs / labels.length)))];
+    if ((t >= minMs && fontsDone) || t >= maxMs) finish(); else setTimeout(tick, 32);
+  };
+  tick();
+})();

@@ -505,3 +505,27 @@ details.mech[open] summary{color:#fff}
   .ring-fill{transition:stroke-dashoffset 1.1s cubic-bezier(.22,.9,.25,1),stroke .3s}
   .ring-center b{transition:color .3s}
 }
+
+
+/* ---------- intro loader ---------- */
+.loader{position:fixed;inset:0;z-index:100;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:22px;background:var(--bg);
+  transition:opacity .55s ease .05s,transform .7s cubic-bezier(.22,.9,.25,1),visibility 0s linear .8s}
+.loader.done{opacity:0;transform:translateY(-10px) scale(1.01);visibility:hidden;pointer-events:none}
+.loader-mark{width:150px;height:auto;display:block}
+.loader-bar{position:relative;width:min(260px,60vw);height:3px;border-radius:2px;background:#161616;overflow:hidden}
+.loader-bar i{display:block;height:100%;width:0;border-radius:2px;background:linear-gradient(90deg,var(--accent-dim),var(--accent));
+  box-shadow:0 0 14px rgba(var(--accent-rgb),.55);transition:width .2s cubic-bezier(.22,.9,.25,1)}
+.loader-bar::after{content:"";position:absolute;inset:0;background:linear-gradient(90deg,transparent 30%,rgba(255,255,255,.35) 50%,transparent 70%);transform:translateX(-100%)}
+.loader-meta{display:flex;gap:14px;align-items:baseline;font-size:12.5px;color:var(--text-dim);letter-spacing:.02em;font-variant-numeric:tabular-nums}
+.loader-meta b{color:#fff;font-weight:600;min-width:3.2ch;text-align:right}
+@media (prefers-reduced-motion: no-preference){
+  @keyframes loader-in{from{opacity:0;transform:translateY(10px) scale(.96);filter:blur(6px)}to{opacity:1;transform:none;filter:none}}
+  @keyframes loader-sheen{to{transform:translateX(100%)}}
+  @keyframes loader-pulse{0%,100%{opacity:1}50%{opacity:.55}}
+  .loader-mark{animation:loader-in .7s cubic-bezier(.22,.9,.25,1) both}
+  .loader-bar,.loader-meta{animation:loader-in .7s cubic-bezier(.22,.9,.25,1) .12s both}
+  .loader-bar::after{animation:loader-sheen 1.1s cubic-bezier(.3,.7,.3,1) .3s infinite}
+  .loader-meta span{animation:loader-pulse 1.6s ease-in-out infinite}
+  .loader.done .loader-mark{transform:translateY(-8px);transition:transform .6s cubic-bezier(.22,.9,.25,1)}
+}
+@media print{.loader{display:none}}
