@@ -63,7 +63,18 @@ export const ACTIVITIES = [
   { n: 18, name: 'Knowledge continuity & handovers',         how: 'Shared data, methods and workflows instead of individual spreadsheets',                      module: 'Core',              doneBy: ROLE_NAMES[0], fixed: 40, perUnit: 0,  driver: 'Fixed',                   expected: 0.5 },
 ];
 
-/* Inputs sheet, yellow cells, with the workbook's defaults. */
+/* Inputs!D30:D34 as the workbook ships them – the verifier runs against these. */
+export const WORKBOOK_SALARIES = [70000, 55000, 75000, 65000, 120000];
+
+/* The state the workbook opens with (used by tests/verify.mjs). */
+export function workbookState() {
+  const s = defaultState();
+  s.roles.forEach((r, i) => { r.salary = WORKBOOK_SALARIES[i]; });
+  return s;
+}
+
+/* Inputs sheet, yellow cells. Same as the workbook except the salaries, which
+   the web version starts at €40,000 for every role (requested 2026-10-18). */
 export function defaultState() {
   return {
     company: 'Your company',          // C6
@@ -78,12 +89,12 @@ export function defaultState() {
     suppliers: 20,                    // C17
     products: 5,                      // C18
     modules: { carbon: 'Yes', esg: 'Yes', pcf: 'No', supply: 'Yes', decarb: 'Yes' }, // C21:C25
-    roles: [                          // C30:F34
-      { people: 2,  salary: 70000,  onCost: 0.25, hours: 1600 },
-      { people: 25, salary: 55000,  onCost: 0.25, hours: 1600 },
-      { people: 2,  salary: 75000,  onCost: 0.25, hours: 1600 },
-      { people: 1,  salary: 65000,  onCost: 0.25, hours: 1600 },
-      { people: 2,  salary: 120000, onCost: 0.25, hours: 1600 },
+    roles: [                          // C30:F34 (salary: web default 40k, workbook values in WORKBOOK_SALARIES)
+      { people: 2,  salary: 40000, onCost: 0.25, hours: 1600 },
+      { people: 25, salary: 40000, onCost: 0.25, hours: 1600 },
+      { people: 2,  salary: 40000, onCost: 0.25, hours: 1600 },
+      { people: 1,  salary: 40000, onCost: 0.25, hours: 1600 },
+      { people: 2,  salary: 40000, onCost: 0.25, hours: 1600 },
     ],
     ext: [                            // C38:D41
       { today: 0,     still: 0 },     // current ESG software licence(s)

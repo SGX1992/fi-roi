@@ -2,10 +2,10 @@
    defaults (tests/expected-defaults.json, exported from
    ROI_Calculator_Master_v2.xlsx). Run: node tests/verify.mjs */
 import { readFileSync } from 'node:fs';
-import { compute, defaultState, SCENARIOS } from '../assets/js/model.js';
+import { compute, workbookState, SCENARIOS } from '../assets/js/model.js';
 
 const expected = JSON.parse(readFileSync(new URL('./expected-defaults.json', import.meta.url)));
-const m = compute(defaultState());
+const m = compute(workbookState());
 const got = {};
 
 m.roles.forEach((r, i) => got[`Inputs!G${30 + i}`] = r.costPerHour);
@@ -47,7 +47,7 @@ got['Calculations!C95'] = m.charts.threeYear[1].benefit;
 got['Calculations!D96'] = m.charts.threeYear[2].investment;
 m.charts.hours.forEach((h, i) => { got[`Calculations!C${99 + i}`] = h.today; got[`Calculations!D${99 + i}`] = h.withFI; });
 
-const st = defaultState();
+const st = workbookState();
 Object.assign(got, {
   'Results!B2': `Business case: Footprint Intelligence for ${st.company}`,
   'Results!B3': `Compared with today's approach (${st.approach})  ·  Scenario: ${st.scenario}  ·  Step 3 of 3 – Results`,
