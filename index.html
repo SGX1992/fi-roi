@@ -32,8 +32,8 @@
   </header>
 
   <section class="hero">
-    <h1>What does sustainability management cost you today – and how much could Footprint Intelligence save?</h1>
-    <p>Enter your company profile, people and current costs, review the hours per activity, and get a management summary: time saved, net benefit, 3-year ROI, payback and scenarios. Start with the defaults for a quick estimate in 2 minutes, then refine the activities for a detailed assessment.</p>
+    <h1 id="heroTitle">How much could Footprint Intelligence save you?</h1>
+    <p>Enter your figures, check the activities, get the business case: time saved, net benefit, return on investment and payback. The defaults give a first estimate in two minutes.</p>
   </section>
 
   <nav class="steps no-print" role="tablist" aria-label="Steps">
@@ -235,6 +235,26 @@
       <div class="kpi kpi--hero"><div class="k-label">Recurring annual net benefit</div><div class="k-value" id="kNet"></div><div class="k-sub">per year from year 2 (capacity + cash)</div></div>
       <div class="kpi"><div class="k-label">3-year ROI</div><div class="k-value" id="kRoi"></div><div class="k-sub">(3-yr cost today − 3-yr cost with FI) ÷ 3-yr cost with FI</div></div>
       <div class="kpi"><div class="k-label">Payback period</div><div class="k-value" id="kPayback"></div><div class="k-sub">incl. one-time transition costs</div></div>
+    </div>
+
+    <div class="card roi-card">
+      <div class="card-head"><div><h3>Return on investment</h3><p>What comes back for every euro spent on Footprint Intelligence over 3 years – same figures as the business case below.</p></div></div>
+      <div class="roi-grid">
+        <div class="roi-ring" id="roiRing" role="img" aria-label="Net benefit per euro invested">
+          <svg viewBox="0 0 200 200">
+            <circle class="ring-track" cx="100" cy="100" r="84"/>
+            <circle class="ring-fill" id="roiRingFill" cx="100" cy="100" r="84"/>
+          </svg>
+          <div class="ring-center"><b id="roiPerEuro"></b><span>net benefit per €1 invested</span></div>
+        </div>
+        <div class="roi-facts">
+          <div class="roi-fact"><span>Investment in FI over 3 years</span><b id="roiInvest"></b><small>3 × annual subscription + one-time transition costs</small></div>
+          <div class="roi-fact"><span>Return: 3-year net benefit</span><b id="roiReturn"></b><small>3-year cost today − 3-year cost with Footprint Intelligence</small></div>
+          <div class="roi-fact"><span>3-year ROI</span><b id="roiRoi"></b><small>net benefit ÷ 3-year cost with FI – the headline definition</small></div>
+          <div class="roi-fact"><span>Payback</span><b id="roiPayback"></b><small id="roiPaybackSub">first month with a positive cumulative net benefit</small></div>
+        </div>
+      </div>
+      <p class="roi-line" id="roiLine"></p>
     </div>
 
     <div class="card">

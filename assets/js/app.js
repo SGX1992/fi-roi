@@ -366,7 +366,26 @@ function update() {
   if (typeof h.payback === 'number') setNum($('#kPayback'), h.payback, v => `${Math.round(v)} months`); else setNum($('#kPayback'), h.paybackText, v => v);
   $('#kNet').classList.toggle('neg', h.recurringNet < 0); $('#kRoi').classList.toggle('neg', h.roi3y < 0);
 
-  /* dock */
+  /* return on investment – Calculations!F44, F46, F47, F45, F48 for the selected scenario */
+  const sel = m.selected;
+  setNum($('#roiPerEuro'), sel.netPerEuro, fmtEur2);
+  setNum($('#roiInvest'), sel.invest3y, fmtEur);
+  setNum($('#roiReturn'), sel.net3y, fmtEur);
+  setNum($('#roiRoi'), sel.roi3y, fmtPct);
+  if (typeof sel.payback === 'number') setNum($('#roiPayback'), sel.payback, v => `${Math.round(v)} months`); else setNum($('#roiPayback'), '> 36 months', v => v);
+  $('#roiReturn').classList.toggle('neg', sel.net3y < 0); $('#roiRoi').classList.toggle('neg', sel.roi3y < 0); $('#roiPerEuro').classList.toggle('neg', sel.netPerEuro < 0);
+  const ringFill = $('#roiRingFill'), circ = 2 * Math.PI * 84;
+  ringFill.style.strokeDasharray = circ;
+  ringFill.style.strokeDashoffset = circ * (1 - Math.max(0, Math.min(1, sel.netPerEuro)));
+  $('#roiRing').classList.toggle('over', sel.netPerEuro > 1);
+  $('#roiLine').textContent = sel.net3y >= 0
+    ? `Over 3 years, every €1 spent on Footprint Intelligence (${fmtEur(sel.invest3y)} in total) returns ${fmtEur2(sel.netPerEuro)} in net benefit on top of paying for itself – ${fmtEur(sel.net3y)} in total, ${state.scenario.toLowerCase()} scenario.`
+    : `Over 3 years, the ${state.scenario.toLowerCase()} scenario does not recover the ${fmtEur(sel.invest3y)} spent on Footprint Intelligence: the net result is ${fmtEur(sel.net3y)}. Check the activities and external costs, or compare scenarios below.`;
+
+  /* dock – a sweep crosses the bar whenever the headline moves */
+  const sig = [h.hoursSaved, h.recurringNet, h.roi3y, h.payback].join('|');
+  if (update.sig && update.sig !== sig && !reduced) { const d = $('#dock'); d.classList.remove('sweep'); void d.offsetWidth; d.classList.add('sweep'); }
+  update.sig = sig;
   setNum($('#dHours'), h.hoursSaved, fmtHours); setNum($('#dNet'), h.recurringNet, fmtEur); setNum($('#dRoi'), h.roi3y, fmtPct);
   if (typeof h.payback === 'number') setNum($('#dPayback'), h.payback, v => `${Math.round(v)} mo`); else setNum($('#dPayback'), '> 36 mo', v => v);
   $('#dScen').textContent = state.scenario;
@@ -518,7 +537,7 @@ function drawBars() {
   const box = $('#chartBars');
   const d = model.charts.threeYear;
   const target = [d[0].benefit, d[1].benefit, d[2].investment];
-  animateTo('bars', target, vals => {
+  animateTo('bars', target, (vals, first) => {
     const W = 460, H = 320, L = 56, R = 16, Tp = 30, B = 40;
     const [cap, cash, inv] = vals; const benefits = cap + cash;
     const max = Math.max(benefits, inv, 1); const ticks = niceTicks(0, max, 4); const top = ticks[ticks.length - 1];
@@ -532,7 +551,8 @@ function drawBars() {
     const tip = tooltipFor(box);
     const seg = (x, v0, v1, color, label, name) => {
       const hgt = Math.max(0, y(v0) - y(v1) - gap);
-      const r = sv('rect', { x: x - bw / 2, y: y(v1) + (v1 > v0 ? 0 : 0), width: bw, height: hgt, rx: 4, fill: color, class: 'bar' });
+      const r = sv('rect', { x: x - bw / 2, y: y(v1), width: bw, height: hgt, rx: 4, fill: color, class: 'bar' + (first && !reduced ? ' grow-y' : '') });
+      r.style.setProperty('--i', svg.querySelectorAll('rect.bar').length);
       r.addEventListener('pointermove', e => { const rect = svg.getBoundingClientRect(); showTip(box, tip, (e.clientX - rect.left), (e.clientY - rect.top) - 6, `<b>${name}</b><div class="row"><span><i style="--c:${color}"></i>${label}</span><b>${fmtEur(v1 - v0)}</b></div>`); });
       r.addEventListener('pointerleave', () => tip.classList.remove('on'));
       svg.append(r);
@@ -559,8 +579,9 @@ function drawHoursChart() {
   const box = $('#chartHours');
   const d = model.charts.hours;
   const target = d.flatMap(r => [r.today, r.withFI]);
-  animateTo('hours', target, vals => {
+  animateTo('hours', target, (vals, first) => {
     const rowH = 30, L = 190, R = 60, Tp = 8, B = 8, W = 520, H = Tp + d.length * rowH + B;
+    const grow = first && !reduced ? ' grow-x' : '';
     const max = Math.max(1, ...vals); const top = niceTicks(0, max, 4).pop();
     const x = v => L + v / top * (W - L - R);
     const svg = sv('svg', { viewBox: `0 0 ${W} ${H}`, role: 'img', 'aria-label': 'Hours per year by activity, today versus with Footprint Intelligence' });
@@ -570,8 +591,9 @@ function drawHoursChart() {
       const g = sv('g', { opacity: model.activities[i].inScope === 'Yes' ? 1 : .35 });
       const name = r.label.length > 30 ? r.label.slice(0, 29) + '…' : r.label;
       g.append(sv('text', { x: L - 10, y: yTop + 18, 'text-anchor': 'end' }, document.createTextNode(name)));
-      g.append(sv('rect', { x: L, y: yTop + 6, width: Math.max(0, x(today) - L), height: 9, rx: 3, fill: 'var(--s-today)', class: 'bar' }));
-      g.append(sv('rect', { x: L, y: yTop + 17, width: Math.max(0, x(fi) - L), height: 9, rx: 3, fill: 'var(--s-fi)', class: 'bar' }));
+      g.style.setProperty('--i', i);
+      g.append(sv('rect', { x: L, y: yTop + 6, width: Math.max(0, x(today) - L), height: 9, rx: 3, fill: 'var(--s-today)', class: 'bar' + grow }));
+      g.append(sv('rect', { x: L, y: yTop + 17, width: Math.max(0, x(fi) - L), height: 9, rx: 3, fill: 'var(--s-fi)', class: 'bar' + grow }));
       g.append(sv('text', { x: x(Math.max(today, fi)) + 6, y: yTop + 18, class: 'lbl-dim' }, document.createTextNode(`${fmtInt(today)} → ${fmtInt(fi)} h`)));
       const hit = sv('rect', { x: 0, y: yTop, width: W, height: rowH, class: 'hit' });
       hit.addEventListener('pointermove', e => { const rect = svg.getBoundingClientRect(); showTip(box, tip, e.clientX - rect.left, yTop / H * rect.height + 2, `<b>${r.label}</b><div class="row"><span><i style="--c:var(--s-today)"></i>Hours today</span><b>${fmtInt(today)} h</b></div><div class="row"><span><i style="--c:var(--s-fi)"></i>Hours with FI</span><b>${fmtInt(fi)} h</b></div><div class="row"><span>Saved</span><b>${fmtInt(today - fi)} h</b></div>`); });
@@ -597,13 +619,23 @@ function showView(name, { scroll = true } = {}) {
       $$(':scope > *', v).forEach((c, i) => c.style.setProperty('--i', i));
       v.classList.remove('enter'); void v.offsetWidth; v.classList.add('enter');
       setTimeout(() => v.classList.remove('enter'), 1200);
+      /* whatever is already on screen shows at once; the observer only handles what is scrolled to.
+         A timer backs both up, so nothing can stay invisible if the observer never fires. */
+      const vh = window.innerHeight || 800;
+      for (const c of $$('.reveal', v)) if (c.getBoundingClientRect().top < vh * 1.15) c.classList.add('in');
+      clearTimeout(v._revealAll);
+      v._revealAll = setTimeout(() => { for (const c of $$('.reveal', v)) c.classList.add('in'); }, 2500);
     } else if (!on) v.hidden = true;
   }
   for (const t of $$('.step')) t.setAttribute('aria-selected', String(t.dataset.view === name));
   $('.steps').dataset.view = name;
   $('#dockResults').textContent = name === 'results' ? 'Edit inputs' : 'See results →';
   $('#dockResults').dataset.goto = name === 'results' ? 'inputs' : 'results';
-  if (name === 'results') { for (const k of Object.keys(charts)) charts[k].cur = null; drawCharts(); }
+  if (name === 'results') {
+    for (const k of Object.keys(charts)) charts[k].cur = null;
+    if (!reduced) for (const n of $$('#view-results .k-value, #view-results .r-value, .roi-facts b, #roiPerEuro')) if (typeof n._v === 'number') n._v = 0;
+    update();
+  }
   requestAnimationFrame(syncScenSwitches);
   if (scroll) window.scrollTo({ top: Math.max(0, $('.steps').getBoundingClientRect().top + window.scrollY - 16), behavior: reduced ? 'auto' : 'smooth' });
   try { sessionStorage.setItem('fi-roi-view', name); } catch (e) { /* ignore */ }
@@ -625,6 +657,40 @@ $('#shareBtn').addEventListener('click', async () => {
   catch (e) { prompt('Copy this link', url); }
 });
 window.addEventListener('resize', () => syncScenSwitches());
+
+/* ---------- flourishes ---------- */
+/* the headline arrives word by word */
+(() => {
+  const h = $('#heroTitle'); const words = h.textContent.trim().split(/\s+/);
+  h.replaceChildren(...words.flatMap((w, i) => [el('span', { class: 'w', text: w, style: `--w:${i}` }), document.createTextNode(' ')]));
+})();
+/* cards further down rise into view as they are scrolled to */
+if ('IntersectionObserver' in window && !reduced) {
+  const io = new IntersectionObserver(entries => {
+    for (const e of entries) if (e.isIntersecting) { e.target.classList.add('in'); io.unobserve(e.target); }
+  }, { rootMargin: '0px 0px -8% 0px', threshold: 0.08 });
+  for (const c of $$('.view > .card, .view > .grid, .view > .kpis')) { c.classList.add('reveal'); io.observe(c); }
+}
+/* a spotlight follows the pointer across the KPI cards and they tilt toward it */
+if (!reduced && matchMedia('(hover:hover)').matches) {
+  document.addEventListener('pointermove', e => {
+    const k = e.target.closest('.kpi, .roi-card'); if (!k) return;
+    const r = k.getBoundingClientRect(), mx = e.clientX - r.left, my = e.clientY - r.top;
+    k.style.setProperty('--mx', mx + 'px'); k.style.setProperty('--my', my + 'px');
+    if (k.classList.contains('kpi')) {
+      const rx = ((my / r.height) - .5) * -5, ry = ((mx / r.width) - .5) * 6;
+      k.style.transform = `perspective(700px) rotateX(${rx.toFixed(2)}deg) rotateY(${ry.toFixed(2)}deg) translateY(-3px)`;
+    }
+  });
+  document.addEventListener('pointerout', e => { const k = e.target.closest('.kpi'); if (k && !k.contains(e.relatedTarget)) k.style.transform = ''; });
+}
+/* a ripple from the point of the click on steps and buttons */
+if (!reduced) document.addEventListener('pointerdown', e => {
+  const b = e.target.closest('.step, .cta, .scen-switch button'); if (!b) return;
+  const r = b.getBoundingClientRect(), d = Math.max(r.width, r.height) * 2;
+  const rp = el('span', { class: 'ripple', style: `width:${d}px;height:${d}px;left:${e.clientX - r.left - d / 2}px;top:${e.clientY - r.top - d / 2}px` });
+  b.append(rp); rp.addEventListener('animationend', () => rp.remove());
+});
 
 /* ---------- go ---------- */
 bindInputs();
