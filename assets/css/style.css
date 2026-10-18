@@ -297,6 +297,11 @@ details.mech[open] summary{color:#fff}
   .dock-actions .cta--ghost{display:none}
   .view-head h2{font-size:19px}
   th,td{padding:9px 8px;font-size:13px}
+  /* charts keep a readable size and scroll sideways instead of shrinking */
+  .chart{overflow-x:auto;overscroll-behavior-x:contain;margin:0 -8px;padding:0 8px}
+  #chartCum svg{min-width:680px}
+  #chartBars svg{min-width:380px}
+  #chartHours svg{min-width:480px}
 }
 
 /* ---------- print: the Results view as a management summary ---------- */
@@ -355,8 +360,8 @@ details.mech[open] summary{color:#fff}
 
   /* the step pill slides instead of jumping */
   .steps::before{content:"";position:absolute;top:var(--pad,5px);bottom:var(--pad,5px);left:var(--pad,5px);width:calc((100% - 2 * var(--pad,5px) - 2 * var(--gap,6px)) / 3);background:var(--accent);border-radius:9px;transition:transform .38s cubic-bezier(.22,.9,.25,1)}
-  .steps[data-view="activities"]::before{transform:translateX(calc(100% + 6px))}
-  .steps[data-view="results"]::before{transform:translateX(calc(200% + 12px))}
+  .steps[data-view="activities"]::before{transform:translateX(calc(100% + var(--gap,6px)))}
+  .steps[data-view="results"]::before{transform:translateX(calc(200% + 2 * var(--gap,6px)))}
   .step[aria-selected="true"]{background:transparent}
   .step{transition:color .22s,transform .22s}
   .step::after{content:"";position:absolute;inset:0;border-radius:9px;z-index:-1;background:rgba(255,255,255,.06);opacity:0;transform:scale(.9);transition:opacity .22s,transform .28s cubic-bezier(.22,.8,.25,1)}
