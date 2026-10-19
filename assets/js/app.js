@@ -266,18 +266,22 @@ ACTIVITIES.forEach((a, i) => {
     rate: el('td', { class: 'r calc' }), value: el('td', { class: 'r calc strong' }),
     estInput,
   };
-  const details = el('details', { class: 'mech' }, [el('summary', {}, [c.benchLine]), c.mech]);
+  /* the benchmark mechanics open as a row of their own, full width, under the activity */
+  c.mechRow = el('tr', { class: 'mech-row', hidden: true }, el('td', { colspan: 11 }, c.mech));
+  const toggle = el('button', { type: 'button', class: 'mech-toggle', 'aria-expanded': 'false', onclick: () => {
+    const open = c.mechRow.hidden; c.mechRow.hidden = !open; toggle.setAttribute('aria-expanded', String(open)); c.tr.classList.toggle('is-open', open);
+  } }, [c.benchLine]);
   c.tr = el('tr', {}, [
     el('td', { class: 'calc', text: a.n }),
     el('td', {}, [el('span', { class: 'cell-main', text: a.name }), el('span', { class: 'cell-sub', text: a.how })]),
     el('td', {}, [el('span', { class: 'cell-sub', text: a.module, style: 'margin:0 0 4px' }), c.scope]),
     el('td', {}, el('div', { class: 'control is-input' }, doneBy)),
-    el('td', { class: 'r' }, [estimate, el('div', { style: 'margin-top:6px' }, details)]),
+    el('td', { class: 'r' }, [estimate, el('div', { style: 'margin-top:6px;text-align:right' }, toggle)]),
     el('td', { class: 'r' }, numberControl(`activities.${i}.expected`, { pct: true, max: 100, unit: '%' })),
     c.applied, c.withFI, c.saved, c.rate, c.value,
   ]);
   actRows.push(c);
-  actBody.append(c.tr);
+  actBody.append(c.tr, c.mechRow);
 });
 const actTot = { today: el('td', { class: 'r' }), applied: el('td', { class: 'r' }), withFI: el('td', { class: 'r' }), saved: el('td', { class: 'r' }), value: el('td', { class: 'r' }) };
 $('#actTable tfoot').append(el('tr', { class: 'total' }, [el('td', { colspan: 4, text: 'Total' }), actTot.today, el('td'), actTot.applied, actTot.withFI, actTot.saved, el('td'), actTot.value]));
@@ -348,7 +352,7 @@ function update() {
     c.scope.className = `pill ${a.inScope === 'Yes' ? 'on' : 'off'}`;
     c.estInput.placeholder = fmtInt(a.benchmark);
     c.benchLine.innerHTML = `Benchmark <b>${fmtInt(a.benchmark)} h</b>${a.estimate !== null ? ' · overridden' : ''}`;
-    c.mech.innerHTML = `<span>Fixed hours / year <b>${fmtInt(a.fixed)}</b></span><span>Hours per unit <b>${fmtInt(a.perUnit)}</b></span><span>Driver <b>${a.driver}</b></span><span>Units <b>${fmtInt(a.units)}</b></span><span>Benchmark <b>${fmtInt(a.fixed)} + ${fmtInt(a.perUnit)} × ${fmtInt(a.units)} = ${fmtInt(a.benchmark)} h</b></span><span>Conservative / Optimistic <b>${fmtPct(a.conservative)} / ${fmtPct(a.optimistic)}</b></span>`;
+    c.mech.innerHTML = `<span><em>How the benchmark is built</em></span><span>Fixed hours / year <b>${fmtInt(a.fixed)}</b></span><span>Hours per unit <b>${fmtInt(a.perUnit)}</b></span><span>Driver <b>${a.driver}</b></span><span>Units from your inputs <b>${fmtInt(a.units)}</b></span><span>Benchmark <b>${fmtInt(a.fixed)} + ${fmtInt(a.perUnit)} × ${fmtInt(a.units)} = ${fmtInt(a.benchmark)} h</b></span><span>Conservative / Optimistic reduction <b>${fmtPct(a.conservative)} / ${fmtPct(a.optimistic)}</b></span>`;
     setText(c.applied, fmtPct(a.applied)); setText(c.withFI, fmtInt(a.withFI)); setText(c.saved, fmtInt(a.saved));
     setText(c.rate, `€${a.costPerHour.toFixed(2)}`); setText(c.value, fmtEur(a.value));
   });
