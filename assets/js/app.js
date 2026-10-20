@@ -187,14 +187,22 @@ const MODULE_DESC = {
   'Supply chain': 'Customer & supplier questionnaires, supplier data requests',
   Decarbonization: 'Identification and prioritization of reduction measures',
 };
+const ICO = (d) => `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">${d}</svg>`;
+const MODULE_ICON = {
+  Core: ICO('<ellipse cx="12" cy="5" rx="8" ry="3"/><path d="M4 5v6c0 1.7 3.6 3 8 3s8-1.3 8-3V5"/><path d="M4 11v6c0 1.7 3.6 3 8 3s8-1.3 8-3v-6"/>'),
+  'Carbon accounting': ICO('<path d="M17.5 19a4.5 4.5 0 0 0 .5-8.97A7 7 0 0 0 4.7 12.3 3.5 3.5 0 0 0 6 19z"/><path d="M9 15h2.5a1.5 1.5 0 0 1 0 3H9z" opacity=".0"/>'),
+  'ESG reporting': ICO('<path d="M14 3H7a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V8z"/><path d="M14 3v5h5"/><path d="M9 13h6M9 17h6M9 9h2"/>'),
+  PCF: ICO('<path d="M21 8 12 3 3 8v8l9 5 9-5z"/><path d="M3 8l9 5 9-5"/><path d="M12 13v8"/>'),
+  'Supply chain': ICO('<circle cx="18" cy="5" r="2.5"/><circle cx="6" cy="12" r="2.5"/><circle cx="18" cy="19" r="2.5"/><path d="m8.2 10.8 7.6-4.6M8.2 13.2l7.6 4.6"/>'),
+  Decarbonization: ICO('<path d="M3 7l6 6 4-4 8 8"/><path d="M15 17h6v-6"/>'),
+};
 const modulesBox = $('#modules');
 const moduleTiles = {};
 const modTile = (calcName, label, key) => {
   const count = ACTIVITIES.filter(a => a.module === calcName).length;
-  const btn = el('button', { type: 'button', class: 'mod-tile' + (key ? '' : ' is-locked'), role: 'checkbox', 'aria-checked': key ? 'false' : 'true', 'aria-disabled': key ? null : 'true',
+  const btn = el('button', { type: 'button', class: 'mod-tile' + (key ? '' : ' is-locked'), role: 'checkbox', title: MODULE_DESC[calcName], 'aria-checked': key ? 'false' : 'true', 'aria-disabled': key ? null : 'true',
     onclick: key ? () => { state.modules[key] = state.modules[key] === 'Yes' ? 'No' : 'Yes'; update(); } : null }, [
-    el('span', { class: 'mt-head' }, [el('span', { class: 'mt-name', text: label }), el('span', { class: 'mt-check', 'aria-hidden': 'true' })]),
-    el('span', { class: 'mt-desc', text: MODULE_DESC[calcName] }),
+    el('span', { class: 'mt-head' }, [el('span', { class: 'mt-icon', html: MODULE_ICON[calcName] }), el('span', { class: 'mt-name', text: label }), el('span', { class: 'mt-check', 'aria-hidden': 'true' })]),
     el('span', { class: 'mt-foot' }, [el('span', { class: 'mt-count', text: `${count} ${count === 1 ? 'activity' : 'activities'}` }), el('span', { class: 'mt-state', text: key ? '' : 'Always included' })]),
   ]);
   if (key) moduleTiles[key] = btn;

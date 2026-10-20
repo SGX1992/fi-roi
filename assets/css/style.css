@@ -242,17 +242,20 @@ tr.mech-row td{border-top:none;padding:0 10px 14px;background:rgba(255,255,255,.
   background:var(--input-bg);border:1px solid var(--input-border);border-radius:14px;padding:16px 18px 14px}
 .mod-tile:hover{border-color:var(--accent-edge);background:#0C0C0C}
 .mod-tile[aria-checked="true"]{border-color:var(--accent);background:linear-gradient(180deg,rgba(var(--accent-rgb),.08),rgba(var(--accent-rgb),.02) 70%,transparent);box-shadow:0 0 0 1px rgba(var(--accent-rgb),.2),0 0 30px -12px rgba(var(--accent-rgb),.35)}
-.mod-tile[aria-checked="false"] .mt-name,.mod-tile[aria-checked="false"] .mt-desc{opacity:.7}
+.mod-tile[aria-checked="false"] .mt-name{opacity:.7}
 .mod-tile.is-locked{cursor:default;border-style:dashed;border-color:#2A2A2A;background:transparent;box-shadow:none}
 .mod-tile.is-locked .mt-check{background:var(--accent);border-color:var(--accent)}
-.mt-head{display:flex;align-items:flex-start;justify-content:space-between;gap:10px}
-.mt-name{font-size:15px;font-weight:600;letter-spacing:-.01em;line-height:1.3}
+.mt-head{display:flex;align-items:center;gap:12px}
+.mt-icon{width:40px;height:40px;border-radius:11px;flex:0 0 auto;display:inline-flex;align-items:center;justify-content:center;background:var(--surface);color:var(--text-dim);border:1px solid var(--line)}
+.mt-icon svg{width:20px;height:20px}
+.mod-tile[aria-checked="true"] .mt-icon,.mod-tile.is-locked .mt-icon{background:rgba(var(--accent-rgb),.12);color:var(--accent);border-color:rgba(var(--accent-rgb),.3)}
+.mt-name{flex:1;min-width:0;font-size:14.5px;font-weight:600;letter-spacing:-.01em;line-height:1.3}
 .mt-check{width:20px;height:20px;border-radius:6px;border:1.5px solid var(--input-border);flex:0 0 auto;display:inline-flex;align-items:center;justify-content:center;background:transparent}
 .mt-check::after{content:"";width:10px;height:6px;border-left:2px solid #0B0B0B;border-bottom:2px solid #0B0B0B;transform:rotate(-45deg) scale(0);margin-top:-2px}
 .mod-tile[aria-checked="true"] .mt-check{background:var(--accent);border-color:var(--accent)}
 .mod-tile[aria-checked="true"] .mt-check::after,.mod-tile.is-locked .mt-check::after{transform:rotate(-45deg) scale(1)}
 .mt-desc{font-size:12.5px;color:var(--text-dim);line-height:1.45}
-.mt-foot{display:flex;justify-content:space-between;gap:10px;margin-top:auto;padding-top:10px;border-top:1px solid var(--line);font-size:11.5px;color:var(--text-faint)}
+.mt-foot{display:flex;justify-content:space-between;gap:10px;margin-top:2px;padding-top:10px;border-top:1px solid var(--line);font-size:11.5px;color:var(--text-faint)}
 .mod-tile[aria-checked="true"] .mt-state,.mod-tile.is-locked .mt-state{color:var(--accent)}
 
 /* how the calculation works – folded away by default */
@@ -590,7 +593,9 @@ tr.mech-row td{border-top:none;padding:0 10px 14px;background:rgba(255,255,255,.
   .mod-tile:not(.is-locked):hover{transform:translateY(-2px)}
   .mt-check{transition:background .25s,border-color .25s}
   .mt-check::after{transition:transform .3s cubic-bezier(.34,1.56,.64,1)}
-  .mt-name,.mt-desc{transition:opacity .25s}
+  .mt-name{transition:opacity .25s}
+  .mt-icon{transition:background .3s,color .3s,border-color .3s,transform .3s cubic-bezier(.34,1.56,.64,1)}
+  .mod-tile:not(.is-locked):hover .mt-icon{transform:scale(1.08) rotate(-4deg)}
   .mod-tile .ripple{background:rgba(var(--accent-rgb),.18)}
   .how-card[open] .how,.how-card[open] .legend-colours,.how-card[open] .how-list{animation:rise .3s cubic-bezier(.22,.9,.25,1)}
   .scen-tile:hover{transform:translateY(-3px)}
