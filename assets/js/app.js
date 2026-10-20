@@ -208,8 +208,8 @@ const modTile = (calcName, label, key) => {
   if (key) moduleTiles[key] = btn;
   modulesBox.append(btn);
 };
-modTile('Core', 'Core data management & reporting', null);
-for (const m of MODULES) modTile(m.calcName, m.label, m.key);
+modTile('Core', 'Core Data Management', null);
+for (const key of ['carbon', 'esg', 'pcf', 'decarb', 'supply']) { const m = MODULES.find(x => x.key === key); modTile(m.calcName, m.label, m.key); }
 function syncModuleTiles() {
   for (const m of MODULES) {
     const on = state.modules[m.key] === 'Yes', t = moduleTiles[m.key];

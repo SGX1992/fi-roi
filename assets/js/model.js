@@ -33,11 +33,12 @@ export const ROLE_NAMES = [
 ];
 
 export const MODULES = [
-  { key: 'carbon', label: 'Carbon accounting (corporate carbon footprint)', calcName: 'Carbon accounting' }, // Inputs!C21
-  { key: 'esg',    label: 'ESG / CSRD reporting',                            calcName: 'ESG reporting' },     // Inputs!C22
-  { key: 'pcf',    label: 'Product carbon footprints (PCF)',                 calcName: 'PCF' },               // Inputs!C23
-  { key: 'supply', label: 'Supply chain & questionnaires',                   calcName: 'Supply chain' },      // Inputs!C24
-  { key: 'decarb', label: 'Decarbonization planning',                        calcName: 'Decarbonization' },   // Inputs!C25
+  /* order = Inputs!C21:C25 (the cross-check maps by index); the tiles show their own order */
+  { key: 'carbon', label: 'CCF – Corporate Carbon Footprint Module',  calcName: 'Carbon accounting' }, // Inputs!C21
+  { key: 'esg',    label: 'ESG / CSRD Reporting Module',              calcName: 'ESG reporting' },     // Inputs!C22
+  { key: 'pcf',    label: 'PCF – Product Carbon Footprint Module',    calcName: 'PCF' },               // Inputs!C23
+  { key: 'supply', label: 'Supply Chain & Questionnaires Module',     calcName: 'Supply chain' },      // Inputs!C24
+  { key: 'decarb', label: 'Decarbonization & Impact Module',          calcName: 'Decarbonization' },   // Inputs!C25
 ];
 
 /* Activities!B7:J24 – the fixed part of every activity row. Editable cells
