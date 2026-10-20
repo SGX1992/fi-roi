@@ -178,15 +178,36 @@ fillSelect($('#approachSel'), APPROACHES);
 fillSelect($('#roundsSel'), ROUNDS, true);
 fillSelect($('#scenarioSel'), SCENARIOS);
 
+/* modules as tiles that switch on and off; Core is shown too, locked on */
+const MODULE_DESC = {
+  Core: 'Data requesting, preparation, validation, coordination, reporting, dashboards, evidence, approvals, knowledge continuity',
+  'Carbon accounting': 'Emission factor maintenance, calculations & consolidation across entities',
+  'ESG reporting': 'Regulatory requirements & gap analysis, narrative drafting for CSRD / ESRS, VSME and others',
+  PCF: 'Product carbon footprints – uses the products per year from section 2',
+  'Supply chain': 'Customer & supplier questionnaires, supplier data requests',
+  Decarbonization: 'Identification and prioritization of reduction measures',
+};
 const modulesBox = $('#modules');
-for (const m of MODULES) {
-  modulesBox.append(el('div', { class: 'module-row' }, [
-    el('span', { class: 'label', text: m.label }),
-    el('div', { class: 'chips', role: 'radiogroup', 'aria-label': m.label }, ['Yes', 'No'].map(v => {
-      const input = el('input', { type: 'radio', name: `mod-${m.key}`, value: v }); input.dataset.k = `modules.${m.key}`;
-      return el('label', { class: 'chip' }, [input, el('span', { text: v })]);
-    })),
-  ]));
+const moduleTiles = {};
+const modTile = (calcName, label, key) => {
+  const count = ACTIVITIES.filter(a => a.module === calcName).length;
+  const btn = el('button', { type: 'button', class: 'mod-tile' + (key ? '' : ' is-locked'), role: 'checkbox', 'aria-checked': key ? 'false' : 'true', 'aria-disabled': key ? null : 'true',
+    onclick: key ? () => { state.modules[key] = state.modules[key] === 'Yes' ? 'No' : 'Yes'; update(); } : null }, [
+    el('span', { class: 'mt-head' }, [el('span', { class: 'mt-name', text: label }), el('span', { class: 'mt-check', 'aria-hidden': 'true' })]),
+    el('span', { class: 'mt-desc', text: MODULE_DESC[calcName] }),
+    el('span', { class: 'mt-foot' }, [el('span', { class: 'mt-count', text: `${count} ${count === 1 ? 'activity' : 'activities'}` }), el('span', { class: 'mt-state', text: key ? '' : 'Always included' })]),
+  ]);
+  if (key) moduleTiles[key] = btn;
+  modulesBox.append(btn);
+};
+modTile('Core', 'Core data management & reporting', null);
+for (const m of MODULES) modTile(m.calcName, m.label, m.key);
+function syncModuleTiles() {
+  for (const m of MODULES) {
+    const on = state.modules[m.key] === 'Yes', t = moduleTiles[m.key];
+    t.setAttribute('aria-checked', String(on));
+    $('.mt-state', t).textContent = on ? 'In scope' : 'Not in scope';
+  }
 }
 
 const roleCells = [];
@@ -325,31 +346,33 @@ const SCEN_DESC = {
   Optimistic: `${fmtPct(FACTOR_OPTIMISTIC)} of the expected reduction, capped at ${fmtPct(REDUCTION_CAP)}`,
 };
 const scenTiles = [];   // { box, tiles: [{ btn, hours, net, roi, payback }] }
-function buildScenTiles(box) {
+function buildScenTiles(box, withStats) {
   if (!box) return;
   const tiles = SCENARIOS.map((name, i) => {
-    const t = { hours: el('b'), net: el('b'), roi: el('b'), payback: el('b') };
-    t.btn = el('button', { type: 'button', class: 'scen-tile', role: 'radio', 'aria-checked': 'false', style: `--i:${i}`,
+    const t = withStats ? { hours: el('b'), net: el('b'), roi: el('b'), payback: el('b') } : {};
+    t.btn = el('button', { type: 'button', class: 'scen-tile' + (withStats ? '' : ' scen-tile--plain'), role: 'radio', 'aria-checked': 'false', style: `--i:${i}`,
       onclick: () => { if (state.scenario === name) return; state.scenario = name; syncInputs(); update(); } }, [
       el('span', { class: 'st-head' }, [el('span', { class: 'st-name', text: name }), el('span', { class: 'st-check', 'aria-hidden': 'true' })]),
       el('span', { class: 'st-desc', text: SCEN_DESC[name] }),
-      el('span', { class: 'st-stats' }, [
+      withStats ? el('span', { class: 'st-stats' }, [
         el('span', {}, [el('small', { text: 'Time saved / yr' }), t.hours]),
         el('span', {}, [el('small', { text: 'Net benefit / yr' }), t.net]),
         el('span', {}, [el('small', { text: '3-year ROI' }), t.roi]),
         el('span', {}, [el('small', { text: 'Payback' }), t.payback]),
-      ]),
+      ]) : null,
     ]);
     box.append(t.btn);
     return t;
   });
   scenTiles.push({ box, tiles });
 }
-buildScenTiles($('#scenTiles2')); buildScenTiles($('#scenTiles3'));
+/* Activities: the choice only. Results: each scenario with its own figures. */
+buildScenTiles($('#scenTiles2'), false); buildScenTiles($('#scenTiles3'), true);
 function syncScenSwitches() {
   for (const { tiles } of scenTiles) tiles.forEach((t, c) => {
     const col = model.columns[c];
     t.btn.setAttribute('aria-checked', String(SCENARIOS[c] === state.scenario));
+    if (!t.hours) return;
     setNum(t.hours, col.hoursSaved, fmtHours);
     setNum(t.net, col.recurringNet, fmtEur); t.net.classList.toggle('neg', col.recurringNet < 0);
     setNum(t.roi, col.roi3y, fmtPct); t.roi.classList.toggle('neg', col.roi3y < 0);
@@ -362,6 +385,7 @@ function update() {
   model = compute(state);
   const m = model;
   persist();
+  syncModuleTiles();
 
   /* step 1 */
   m.roles.forEach((r, i) => setText(roleCells[i], `€${r.costPerHour.toFixed(2)}`));
@@ -716,7 +740,7 @@ if (!reduced && matchMedia('(hover:hover)').matches) {
 }
 /* a ripple from the point of the click on steps and buttons */
 if (!reduced) document.addEventListener('pointerdown', e => {
-  const b = e.target.closest('.step, .cta, .scen-tile'); if (!b) return;
+  const b = e.target.closest('.step, .cta, .scen-tile, .mod-tile:not(.is-locked)'); if (!b) return;
   const r = b.getBoundingClientRect(), d = Math.max(r.width, r.height) * 2;
   const rp = el('span', { class: 'ripple', style: `width:${d}px;height:${d}px;left:${e.clientX - r.left - d / 2}px;top:${e.clientY - r.top - d / 2}px` });
   b.append(rp); rp.addEventListener('animationend', () => rp.remove());

@@ -11,7 +11,7 @@
 <meta property="og:description" content="What does sustainability management cost you today – and how much time and money could Footprint Intelligence save?">
 <meta property="og:url" content="https://roi.footprint-intelligence.com/">
 <link rel="icon" href="assets/img/favicon.png">
-<link rel="stylesheet" href="assets/css/style.css?v=9">
+<link rel="stylesheet" href="assets/css/style.css?v=10">
 </head>
 <body>
 <div class="gate" id="gate" hidden>
@@ -103,9 +103,8 @@
     </div>
 
     <div class="card">
-      <div class="card-head"><span class="num">3</span><h3>Modules in scope</h3></div>
-      <div id="modules"></div>
-      <p class="card-note">Core data management and reporting activities are always included.</p>
+      <div class="card-head"><span class="num">3</span><div><h3>Modules in scope</h3><p>Select what Footprint Intelligence should cover. Activities outside the selected modules count as 0 hours.</p></div></div>
+      <div class="mod-tiles" id="modules" role="group" aria-label="Modules in scope"></div>
     </div>
 
     <div class="card">
@@ -159,8 +158,8 @@
       </div>
     </div>
 
-    <div class="card">
-      <div class="card-head"><h3>How the calculation works</h3></div>
+    <details class="card card--compact how-card">
+      <summary><span class="how-title">How the calculation works</span><span class="how-hint">7 formulas · colour legend</span><i aria-hidden="true"></i></summary>
       <div class="how">
         <div><b>Cost per hour</b><span>Avg. gross salary × (1 + employer on-costs) ÷ productive hours per year</span></div>
         <div><b>Time value saved</b><span>(Hours today − hours with FI) × cost per hour, per activity</span></div>
@@ -175,7 +174,7 @@
         <span><i class="calc"></i>Calculated – formulas, nothing to change</span>
         <span><i class="bench"></i>Benchmark – typical default values, driven by your inputs</span>
       </div>
-    </div>
+    </details>
 
     <div class="no-print" style="display:flex;justify-content:flex-end">
       <button class="cta" type="button" data-goto="activities">Next: review activities <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14m-6-6 6 6-6 6"/></svg></button>
@@ -192,7 +191,7 @@
     </div>
 
     <div class="scen-block">
-      <div class="scen-block-head"><h3>Choose the scenario</h3><p>Every figure below follows this choice. The reductions per activity are the “Expected” case; Conservative and Optimistic scale them.</p></div>
+      <div class="scen-block-head"><h3>Choose the scenario</h3><p>The reductions per activity are the “Expected” case; Conservative and Optimistic scale them. The results of all three are compared on the Results page.</p></div>
       <div class="scen-tiles" id="scenTiles2" role="radiogroup" aria-label="Scenario"></div>
     </div>
 
@@ -218,9 +217,9 @@
       </div>
     </div>
 
-    <div class="card">
-      <div class="card-head"><h3>How to read this table</h3></div>
-      <ul class="prose">
+    <details class="card card--compact how-card">
+      <summary><span class="how-title">How to read this table</span><span class="how-hint">benchmarks, estimates, scenarios, applied reduction</span><i aria-hidden="true"></i></summary>
+      <ul class="prose how-list">
         <li>Benchmark hours = fixed hours + hours per unit × units. Units come from your Inputs (e.g. 10 locations × 1 round = 10 units). Open “Benchmark” under an activity to see how its hours are built.</li>
         <li>If you know your actual effort, enter it in “Your estimate” – it replaces the benchmark. Activities outside the selected modules count as 0.</li>
         <li>Expected reductions reflect what remains with FI: preparation, review, exception handling and administration. Human review and approval remain part of every workflow.</li>
@@ -228,10 +227,9 @@
         <li>Saved hours are released capacity. They only reduce cash costs if they replace staffing or external spend.</li>
         <li>Only the “Expected” reduction is entered per activity. Conservative and Optimistic apply the scenario factors <span id="factorNote"></span> (capped at 95%).</li>
       </ul>
-    </div>
+    </details>
 
-    <div class="no-print" style="display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap">
-      <button class="cta cta--ghost" type="button" data-goto="inputs"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M19 12H5m6 6-6-6 6-6"/></svg> Back to inputs</button>
+    <div class="no-print" style="display:flex;justify-content:flex-end;gap:12px;flex-wrap:wrap">
       <button class="cta" type="button" data-goto="results">See results <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14m-6-6 6 6-6 6"/></svg></button>
     </div>
   </section>
@@ -392,6 +390,6 @@
 </div>
 <div class="toast" id="toast" role="status" aria-live="polite"></div>
 
-<script type="module" src="assets/js/app.js?v=9"></script>
+<script type="module" src="assets/js/app.js?v=10"></script>
 </body>
 </html>
