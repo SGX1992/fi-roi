@@ -74,7 +74,7 @@ export function workbookState() {
 }
 
 /* Inputs sheet, yellow cells. Same as the workbook except the salaries, which
-   the web version starts at €40,000 for every role (requested 2026-10-18). */
+   the web version starts at €50,000 for every role (requested 2026-10-20). */
 export function defaultState() {
   return {
     company: 'Your company',          // C6
@@ -89,12 +89,12 @@ export function defaultState() {
     suppliers: 20,                    // C17
     products: 5,                      // C18
     modules: { carbon: 'Yes', esg: 'Yes', pcf: 'No', supply: 'Yes', decarb: 'Yes' }, // C21:C25
-    roles: [                          // C30:F34 (salary: web default 40k, workbook values in WORKBOOK_SALARIES)
-      { people: 2,  salary: 40000, onCost: 0.25, hours: 1600 },
-      { people: 25, salary: 40000, onCost: 0.25, hours: 1600 },
-      { people: 2,  salary: 40000, onCost: 0.25, hours: 1600 },
-      { people: 1,  salary: 40000, onCost: 0.25, hours: 1600 },
-      { people: 2,  salary: 40000, onCost: 0.25, hours: 1600 },
+    roles: [                          // C30:F34 (salary: web default 50k, workbook values in WORKBOOK_SALARIES)
+      { people: 2,  salary: 50000, onCost: 0.25, hours: 1600 },
+      { people: 25, salary: 50000, onCost: 0.25, hours: 1600 },
+      { people: 2,  salary: 50000, onCost: 0.25, hours: 1600 },
+      { people: 1,  salary: 50000, onCost: 0.25, hours: 1600 },
+      { people: 2,  salary: 50000, onCost: 0.25, hours: 1600 },
     ],
     ext: [                            // C38:D41
       { today: 0,     still: 0 },     // current ESG software licence(s)

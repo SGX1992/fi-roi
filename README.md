@@ -16,7 +16,7 @@ arithmetic.
 
 `tests/verify.mjs` runs the engine against the values Excel itself calculated
 for the workbook's own inputs (`workbookState()`; the web page starts with a
-€40,000 salary for every role instead of the workbook's figures) (`tests/expected-defaults.json`, 563 cells exported from
+€50,000 salary for every role instead of the workbook's figures) (`tests/expected-defaults.json`, 563 cells exported from
 the workbook in `tests/`). Run it after any change to the model:
 
 ```bash

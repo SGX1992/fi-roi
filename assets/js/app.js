@@ -6,7 +6,7 @@ import {
   fmtEur, fmtEur2, fmtInt, fmtPct, fmtHours, fmt1,
 } from './model.js';
 
-const STORAGE = 'fi-roi-v2';   // bumped 2026-10-18 with the 40k salary default, so saved states from before do not mask it
+const STORAGE = 'fi-roi-v3';   // bumped with each change of the defaults, so saved states from before do not mask them
 const $ = (s, el = document) => el.querySelector(s);
 const $$ = (s, el = document) => [...el.querySelectorAll(s)];
 const reduced = matchMedia('(prefers-reduced-motion: reduce)').matches;
