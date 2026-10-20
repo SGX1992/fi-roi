@@ -11,7 +11,7 @@
 <meta property="og:description" content="What does sustainability management cost you today – and how much time and money could Footprint Intelligence save?">
 <meta property="og:url" content="https://roi.footprint-intelligence.com/">
 <link rel="icon" href="assets/img/favicon.png">
-<link rel="stylesheet" href="assets/css/style.css?v=8">
+<link rel="stylesheet" href="assets/css/style.css?v=9">
 </head>
 <body>
 <div class="gate" id="gate" hidden>
@@ -189,7 +189,11 @@
         <h2>Step 2 of 3 – Activities</h2>
         <p>Hours today are benchmarks driven by your inputs. Overwrite them in the “Your estimate” field, and adjust who does the work and the expected reduction if needed.</p>
       </div>
-      <div class="scen-switch no-print" id="scenSwitch2" aria-label="Scenario"></div>
+    </div>
+
+    <div class="scen-block">
+      <div class="scen-block-head"><h3>Choose the scenario</h3><p>Every figure below follows this choice. The reductions per activity are the “Expected” case; Conservative and Optimistic scale them.</p></div>
+      <div class="scen-tiles" id="scenTiles2" role="radiogroup" aria-label="Scenario"></div>
     </div>
 
     <div class="card">
@@ -240,13 +244,14 @@
         <p id="resSub"></p>
       </div>
       <div style="display:flex;gap:10px;align-items:center;flex-wrap:wrap" class="no-print">
-        <div class="scen-switch" id="scenSwitch3" aria-label="Scenario"></div>
         <button class="cta cta--ghost cta--sm" id="printBtn" type="button">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 9V3h12v6"/><rect x="3" y="9" width="18" height="9" rx="2"/><path d="M6 15h12v6H6z"/></svg>
           Print / PDF
         </button>
       </div>
     </div>
+
+    <div class="scen-tiles" id="scenTiles3" role="radiogroup" aria-label="Scenario"></div>
 
     <div class="kpis">
       <div class="kpi"><div class="k-label">Time saved per year</div><div class="k-value" id="kHours"></div><div class="k-sub" id="kHoursSub"></div></div>
@@ -387,6 +392,6 @@
 </div>
 <div class="toast" id="toast" role="status" aria-live="polite"></div>
 
-<script type="module" src="assets/js/app.js?v=8"></script>
+<script type="module" src="assets/js/app.js?v=9"></script>
 </body>
 </html>

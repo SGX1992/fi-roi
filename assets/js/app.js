@@ -2,7 +2,7 @@
    inputs to state, patches the outputs and draws the three charts. */
 import {
   compute, defaultState, SCENARIOS, APPROACHES, ROUNDS, ROLE_NAMES, MODULES, ACTIVITIES,
-  FACTOR_CONSERVATIVE, FACTOR_OPTIMISTIC,
+  FACTOR_CONSERVATIVE, FACTOR_OPTIMISTIC, REDUCTION_CAP,
   fmtEur, fmtEur2, fmtInt, fmtPct, fmtHours, fmt1,
 } from './model.js';
 
@@ -316,19 +316,45 @@ const altCells = rows($('#altTable tbody'), [
   ['Software subscription', 3], ['One-time transition costs', 3], ['Net benefit over 3 years', 3, { total: true }],
 ]);
 
-/* scenario switches (Activities and Results) – they drive Inputs!C10 */
-function buildScenSwitch(box) {
-  for (const s of SCENARIOS) box.append(el('button', { type: 'button', text: s, 'aria-pressed': 'false', onclick: () => { state.scenario = s; syncInputs(); update(); } }));
+/* scenario tiles (Activities and Results) – they drive Inputs!C10. Each tile
+   carries that scenario's own headline figures, so the three cases can be
+   compared before one is chosen. */
+const SCEN_DESC = {
+  Conservative: `${fmtPct(FACTOR_CONSERVATIVE)} of the expected reduction per activity`,
+  Expected: 'The reductions exactly as entered per activity',
+  Optimistic: `${fmtPct(FACTOR_OPTIMISTIC)} of the expected reduction, capped at ${fmtPct(REDUCTION_CAP)}`,
+};
+const scenTiles = [];   // { box, tiles: [{ btn, hours, net, roi, payback }] }
+function buildScenTiles(box) {
+  if (!box) return;
+  const tiles = SCENARIOS.map((name, i) => {
+    const t = { hours: el('b'), net: el('b'), roi: el('b'), payback: el('b') };
+    t.btn = el('button', { type: 'button', class: 'scen-tile', role: 'radio', 'aria-checked': 'false', style: `--i:${i}`,
+      onclick: () => { if (state.scenario === name) return; state.scenario = name; syncInputs(); update(); } }, [
+      el('span', { class: 'st-head' }, [el('span', { class: 'st-name', text: name }), el('span', { class: 'st-check', 'aria-hidden': 'true' })]),
+      el('span', { class: 'st-desc', text: SCEN_DESC[name] }),
+      el('span', { class: 'st-stats' }, [
+        el('span', {}, [el('small', { text: 'Time saved / yr' }), t.hours]),
+        el('span', {}, [el('small', { text: 'Net benefit / yr' }), t.net]),
+        el('span', {}, [el('small', { text: '3-year ROI' }), t.roi]),
+        el('span', {}, [el('small', { text: 'Payback' }), t.payback]),
+      ]),
+    ]);
+    box.append(t.btn);
+    return t;
+  });
+  scenTiles.push({ box, tiles });
 }
-buildScenSwitch($('#scenSwitch2')); buildScenSwitch($('#scenSwitch3'));
+buildScenTiles($('#scenTiles2')); buildScenTiles($('#scenTiles3'));
 function syncScenSwitches() {
-  for (const box of $$('.scen-switch')) {
-    const btns = $$('button', box);
-    btns.forEach(b => b.setAttribute('aria-pressed', String(b.textContent === state.scenario)));
-    const on = btns.find(b => b.textContent === state.scenario);
-    /* a hidden switch measures 0 – leave it unmeasured and the button keeps its own fill */
-    if (on && on.offsetWidth > 0) { box.classList.add('measured'); box.style.setProperty('--pill-w', on.offsetWidth + 'px'); box.style.setProperty('--pill-x', (on.offsetLeft - 4) + 'px'); }
-  }
+  for (const { tiles } of scenTiles) tiles.forEach((t, c) => {
+    const col = model.columns[c];
+    t.btn.setAttribute('aria-checked', String(SCENARIOS[c] === state.scenario));
+    setNum(t.hours, col.hoursSaved, fmtHours);
+    setNum(t.net, col.recurringNet, fmtEur); t.net.classList.toggle('neg', col.recurringNet < 0);
+    setNum(t.roi, col.roi3y, fmtPct); t.roi.classList.toggle('neg', col.roi3y < 0);
+    if (typeof col.payback === 'number') setNum(t.payback, col.payback, v => `${Math.round(v)} mo`); else setNum(t.payback, '> 36 mo', v => v);
+  });
 }
 
 /* ---------- update everything from the model ---------- */
@@ -637,7 +663,7 @@ function showView(name, { scroll = true } = {}) {
   $('#dockResults').dataset.goto = name === 'results' ? 'inputs' : 'results';
   if (name === 'results') {
     for (const k of Object.keys(charts)) charts[k].cur = null;
-    if (!reduced) for (const n of $$('#view-results .k-value, #view-results .r-value, .roi-facts b, #roiPerEuro')) if (typeof n._v === 'number') n._v = 0;
+    if (!reduced) for (const n of $$('#view-results .k-value, #view-results .r-value, .roi-facts b, #roiPerEuro, #scenTiles3 b')) if (typeof n._v === 'number') n._v = 0;
     update();
   }
   requestAnimationFrame(syncScenSwitches);
@@ -690,7 +716,7 @@ if (!reduced && matchMedia('(hover:hover)').matches) {
 }
 /* a ripple from the point of the click on steps and buttons */
 if (!reduced) document.addEventListener('pointerdown', e => {
-  const b = e.target.closest('.step, .cta, .scen-switch button'); if (!b) return;
+  const b = e.target.closest('.step, .cta, .scen-tile'); if (!b) return;
   const r = b.getBoundingClientRect(), d = Math.max(r.width, r.height) * 2;
   const rp = el('span', { class: 'ripple', style: `width:${d}px;height:${d}px;left:${e.clientX - r.left - d / 2}px;top:${e.clientY - r.top - d / 2}px` });
   b.append(rp); rp.addEventListener('animationend', () => rp.remove());
