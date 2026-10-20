@@ -1,0 +1,31 @@
+[
+  {
+    "name": "V1 scale up, conservative, partly covered",
+    "state": { "sites": 60, "rounds": 4, "entities": 8, "frameworks": 5, "scenario": "Conservative", "covered": 0.3 }
+  },
+  {
+    "name": "V2 PCF on, ESG + decarb off, optimistic, 40k salaries",
+    "state": { "modules": { "pcf": "Yes", "esg": "No", "decarb": "No" }, "products": 12, "scenario": "Optimistic",
+               "roles": [ { "salary": 40000, "onCost": 0.3, "hours": 1500 }, { "salary": 40000, "people": 40 }, { "salary": 40000 }, { "salary": 40000 }, { "salary": 40000, "onCost": 0.2 } ] }
+  },
+  {
+    "name": "V3 heavy costs, slow ramp-up (payback beyond 36 months)",
+    "state": { "ext": [ { "today": 12000, "still": 0 }, { "today": 5000, "still": 0.5 }, { "today": 30000, "still": 0.2 }, { "today": 4000, "still": 1 } ],
+               "fiSubscription": 60000, "oneTime": { "fee": 5000, "migration": 8000, "parallelMonths": 6, "trainingHours": 120 }, "rampUp": 0.4 }
+  },
+  {
+    "name": "V4 activity overrides, cap at 95 %, other roles",
+    "state": { "questionnaires": 40, "suppliers": 100,
+               "activities": [ { "estimate": 500, "doneBy": "Finance & controlling", "expected": 0.9 }, null, { "estimate": 0 }, null, { "expected": 0.2 }, null, null, null, { "estimate": 80 }, null, null, null, null, { "doneBy": "Procurement" }, null, null, null, { "expected": 0.8 } ] }
+  },
+  {
+    "name": "V5 alternative software, other tool today, monthly rounds",
+    "state": { "company": "Testfirma GmbH", "approach": "Other sustainability software", "covered": 0.5, "rounds": 12,
+               "alt": { "licence": 35000, "oneTime": 10000, "share": 0.8, "extra": 0 }, "ext": [ { "today": 18000, "still": 0 }, null, null, null ], "oneTime": { "parallelMonths": 2 } }
+  },
+  {
+    "name": "V6 edge: all modules off, zero sites, zero salary",
+    "state": { "modules": { "carbon": "No", "esg": "No", "pcf": "No", "supply": "No", "decarb": "No" }, "sites": 0,
+               "roles": [ null, { "salary": 0 }, null, null, null ], "scenario": "Expected" }
+  }
+]

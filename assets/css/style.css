@@ -156,6 +156,11 @@ tr.out td .control{pointer-events:none}
 #actTable td:nth-child(3){min-width:110px}
 #actTable td:nth-child(4) .control{min-width:170px}
 #actTable td:nth-child(5) .control,#actTable td:nth-child(6) .control{min-width:104px;max-width:120px;margin-left:auto}
+/* every cell hangs from the top, so the estimate field (with its benchmark toggle
+   underneath) and the reduction field next to it share one top edge */
+#actTable tbody tr:not(.mech-row) td{vertical-align:top}
+#actTable tbody td:first-child,#actTable tbody td.calc{padding-top:19px}
+#actTable tbody td:nth-child(2),#actTable tbody td:nth-child(3){padding-top:16px}
 #rolesTable{min-width:860px}
 #rolesTable td .control{min-width:120px;margin-left:auto}
 #extTable{min-width:820px}

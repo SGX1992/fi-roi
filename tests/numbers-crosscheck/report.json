@@ -1,0 +1,68 @@
+[
+  {
+    "name": "V1 scale up, conservative, partly covered",
+    "checked": 290,
+    "fails": [],
+    "headline": {
+      "hours": 2042.8345000000002,
+      "net": 37338.57812499999,
+      "roi": 0.12073925497810066,
+      "payback": "3 months"
+    }
+  },
+  {
+    "name": "V2 PCF on, ESG + decarb off, optimistic, 40k salaries",
+    "checked": 290,
+    "fails": [],
+    "headline": {
+      "hours": 1416.6875,
+      "net": 21215.583333333336,
+      "roi": 0.1822513035001312,
+      "payback": "13 months"
+    }
+  },
+  {
+    "name": "V3 heavy costs, slow ramp-up (payback beyond 36 months)",
+    "checked": 290,
+    "fails": [],
+    "headline": {
+      "hours": 1015.25,
+      "net": 10226.5625,
+      "roi": -0.03218794718061115,
+      "payback": "> 36 months"
+    }
+  },
+  {
+    "name": "V4 activity overrides, cap at 95 %, other roles",
+    "checked": 290,
+    "fails": [],
+    "headline": {
+      "hours": 1307.25,
+      "net": 14351.5625,
+      "roi": 0.09667317517451327,
+      "payback": "16 months"
+    }
+  },
+  {
+    "name": "V5 alternative software, other tool today, monthly rounds",
+    "checked": 290,
+    "fails": [],
+    "headline": {
+      "hours": 3562.875,
+      "net": 102839.84375,
+      "roi": 0.23638509610541408,
+      "payback": "2 months"
+    }
+  },
+  {
+    "name": "V6 edge: all modules off, zero sites, zero salary",
+    "checked": 290,
+    "fails": [],
+    "headline": {
+      "hours": 407.25,
+      "net": -17992.1875,
+      "roi": -0.3590884813957629,
+      "payback": "> 36 months"
+    }
+  }
+]
