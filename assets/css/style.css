@@ -237,19 +237,20 @@ tr.mech-row td{border-top:none;padding:0 10px 14px;background:rgba(255,255,255,.
 .roi-card{position:relative;overflow:hidden}
 
 /* module tiles */
-.mod-tiles{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px}
-.mod-tile{position:relative;overflow:hidden;display:flex;flex-direction:column;gap:8px;text-align:left;cursor:pointer;color:var(--text);
-  background:var(--input-bg);border:1px solid var(--input-border);border-radius:14px;padding:16px 18px 14px}
+.mod-tiles{display:grid;grid-template-columns:repeat(6,minmax(0,1fr));gap:10px}
+.mod-tile{position:relative;overflow:hidden;display:flex;flex-direction:column;gap:10px;text-align:left;cursor:pointer;color:var(--text);
+  background:var(--input-bg);border:1px solid var(--input-border);border-radius:14px;padding:16px 16px 12px;min-height:150px}
 .mod-tile:hover{border-color:var(--accent-edge);background:#0C0C0C}
 .mod-tile[aria-checked="true"]{border-color:var(--accent);background:linear-gradient(180deg,rgba(var(--accent-rgb),.08),rgba(var(--accent-rgb),.02) 70%,transparent);box-shadow:0 0 0 1px rgba(var(--accent-rgb),.2),0 0 30px -12px rgba(var(--accent-rgb),.35)}
 .mod-tile[aria-checked="false"] .mt-name{opacity:.7}
 .mod-tile.is-locked{cursor:default;border-style:dashed;border-color:#2A2A2A;background:transparent;box-shadow:none}
 .mod-tile.is-locked .mt-check{background:var(--accent);border-color:var(--accent)}
-.mt-head{display:flex;align-items:center;gap:12px}
+.mt-head{display:flex;flex-direction:column;align-items:flex-start;gap:12px;padding-right:26px}
+.mt-check{position:absolute;top:14px;right:14px}
 .mt-icon{width:40px;height:40px;border-radius:11px;flex:0 0 auto;display:inline-flex;align-items:center;justify-content:center;background:var(--surface);color:var(--text-dim);border:1px solid var(--line)}
 .mt-icon svg{width:20px;height:20px}
 .mod-tile[aria-checked="true"] .mt-icon,.mod-tile.is-locked .mt-icon{background:rgba(var(--accent-rgb),.12);color:var(--accent);border-color:rgba(var(--accent-rgb),.3)}
-.mt-name{flex:1;min-width:0;font-size:14.5px;font-weight:600;letter-spacing:-.01em;line-height:1.3}
+.mt-name{min-width:0;font-size:13.5px;font-weight:600;letter-spacing:-.01em;line-height:1.3}
 .mt-check{width:20px;height:20px;border-radius:6px;border:1.5px solid var(--input-border);flex:0 0 auto;display:inline-flex;align-items:center;justify-content:center;background:transparent}
 .mt-check::after{content:"";width:10px;height:6px;border-left:2px solid #0B0B0B;border-bottom:2px solid #0B0B0B;transform:rotate(-45deg) scale(0);margin-top:-2px}
 .mod-tile[aria-checked="true"] .mt-check{background:var(--accent);border-color:var(--accent)}
@@ -362,7 +363,7 @@ tr.mech-row td{border-top:none;padding:0 10px 14px;background:rgba(255,255,255,.
 /* ---------- responsive ---------- */
 @media (max-width:980px){
   .kpis{grid-template-columns:repeat(2,minmax(0,1fr))}
-  .mod-tiles{grid-template-columns:repeat(2,minmax(0,1fr))}
+  .mod-tiles{grid-template-columns:repeat(3,minmax(0,1fr))}
   .st-stats b{font-size:16px}
   .grid-3{grid-template-columns:repeat(2,minmax(0,1fr))}
   .dock-kpis{gap:18px}
@@ -383,7 +384,8 @@ tr.mech-row td{border-top:none;padding:0 10px 14px;background:rgba(255,255,255,.
   .kpis{grid-template-columns:1fr 1fr;gap:10px}
   .kpi{padding:16px}
   .scen-tiles{grid-template-columns:1fr;gap:10px}
-  .mod-tiles{grid-template-columns:1fr;gap:8px}
+  .mod-tiles{grid-template-columns:repeat(2,minmax(0,1fr));gap:8px}
+  .mod-tile{min-height:0;padding:14px 14px 10px}
   .how-card summary{padding:14px 18px}
   .how-card .how{margin:0 18px}
   .how-card .legend-colours{padding:0 18px 16px}
