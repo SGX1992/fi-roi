@@ -61,7 +61,7 @@ a:hover{border-bottom-color:var(--accent)}
 .hero p{color:var(--text-dim);margin-top:12px;max-width:62ch;font-size:15.5px}
 
 /* ---------- steps (segmented, as the format switch on the poster tool) ---------- */
-.steps{display:grid;grid-template-columns:repeat(3,1fr);gap:6px;padding:5px;background:var(--input-bg);border:1px solid var(--input-border);border-radius:14px;margin-bottom:28px}
+.steps{display:grid;grid-template-columns:repeat(2,1fr);gap:6px;padding:5px;background:var(--input-bg);border:1px solid var(--input-border);border-radius:14px;margin-bottom:28px}
 .step{position:relative;display:flex;align-items:center;justify-content:center;gap:10px;padding:12px 14px;border-radius:9px;border:none;background:transparent;color:var(--text-dim);font-size:14.5px;font-weight:500;cursor:pointer;transition:color .15s,background .15s;white-space:nowrap}
 .step i{font-style:normal;display:inline-flex;align-items:center;justify-content:center;width:22px;height:22px;border-radius:50%;border:1px solid var(--input-border);font-size:11.5px;font-weight:600;color:var(--text-dim)}
 .step:hover{color:#fff}
@@ -149,18 +149,30 @@ tr.out td{opacity:.45}
 tr.out td .control{pointer-events:none}
 /* the activities sheet is wide by nature: it keeps its width and scrolls inside
    the card rather than folding every cell into a column of words */
-#actTable{min-width:1080px}
-#actTable th,#actTable td{padding-left:8px;padding-right:8px}
-#actTable td:nth-child(2){min-width:230px}
-#actTable td:nth-child(2) .cell-sub{max-width:36ch}
-#actTable td:nth-child(3){min-width:110px}
-#actTable td:nth-child(4) .control{min-width:170px}
-#actTable td:nth-child(5) .control,#actTable td:nth-child(6) .control{min-width:104px;max-width:120px;margin-left:auto}
+#actTable{min-width:980px}
+#actTable th,#actTable td{padding:7px 8px;font-size:13px}
+#actTable thead th{font-size:10.5px;padding-top:0}
+#actTable td:nth-child(2){min-width:210px}
+#actTable td:nth-child(3){min-width:104px}
+#actTable td .control input,#actTable td .control select{padding:6px 9px;font-size:13px;border-radius:7px}
+#actTable td .control select{padding-right:30px;background-position:right 8px center;background-size:14px}
+#actTable td .control.has-unit input{padding-right:28px}
+#actTable td:nth-child(4) .control{min-width:160px}
+#actTable td:nth-child(5) .control,#actTable td:nth-child(6) .control{min-width:92px;max-width:108px;margin-left:auto}
+#actTable .cell-sub{font-size:11px;margin:0 0 3px}
+#actTable .pill{font-size:10.5px;padding:2px 7px}
+#actTable .bench{font-size:11px}
+#actTable .mech-toggle{font-size:11.5px}
 /* every cell hangs from the top, so the estimate field (with its benchmark toggle
    underneath) and the reduction field next to it share one top edge */
-#actTable tbody tr:not(.mech-row) td{vertical-align:top}
-#actTable tbody td:first-child,#actTable tbody td.calc{padding-top:19px}
-#actTable tbody td:nth-child(2),#actTable tbody td:nth-child(3){padding-top:16px}
+/* one line per activity: the estimate field and its benchmark toggle sit side by side,
+   so every control in the row shares one centre line */
+#actTable tbody tr:not(.mech-row) td{vertical-align:middle}
+.est-wrap{display:flex;align-items:center;justify-content:flex-end;gap:6px}
+.est-wrap .control{flex:0 1 auto}
+.mod-cell{display:inline-flex;align-items:center;gap:8px;font-size:12.5px;color:var(--text-dim);white-space:nowrap}
+.scope-dot{width:8px;height:8px;border-radius:50%;flex:0 0 auto;background:#3A3A3A}
+.scope-dot.on{background:var(--accent);box-shadow:0 0 8px rgba(var(--accent-rgb),.6)}
 #rolesTable{min-width:860px}
 #rolesTable td .control{min-width:120px;margin-left:auto}
 #extTable{min-width:820px}
@@ -175,7 +187,9 @@ tr.out td .control{pointer-events:none}
 /* benchmark disclosure: a toggle in the hours cell opens a full-width row beneath the activity */
 .bench{font-size:12px;color:var(--text-dim);white-space:nowrap}
 .bench b{color:#fff;font-weight:500}
-.mech-toggle{background:none;border:none;padding:0;cursor:pointer;color:var(--text-dim);font-size:12.5px;display:inline-flex;align-items:center;gap:6px;user-select:none}
+.mech-toggle{background:var(--input-bg);border:1px solid var(--input-border);border-radius:7px;width:28px;height:30px;padding:0;cursor:pointer;color:var(--text-dim);display:inline-flex;align-items:center;justify-content:center;flex:0 0 auto;user-select:none}
+.mech-toggle:hover{border-color:var(--accent-edge)}
+.mech-toggle.is-overridden{border-color:rgba(var(--accent-rgb),.5);color:var(--accent)}
 .mech-toggle::before{content:"";width:6px;height:6px;border-right:1.5px solid currentColor;border-bottom:1.5px solid currentColor;transform:rotate(-45deg);transition:transform .15s;flex:0 0 auto}
 .mech-toggle[aria-expanded="true"]::before{transform:rotate(45deg)}
 .mech-toggle[aria-expanded="true"],.mech-toggle:hover{color:#fff}
@@ -275,6 +289,37 @@ tr.mech-row td{border-top:none;padding:0 10px 14px;background:rgba(255,255,255,.
 .how-card .how-list{margin:0 24px;padding:0 0 18px;font-size:13px}
 .how-card .how-list li{margin-top:5px}
 
+/* the offer: the one number the whole case hangs on, so it leads the page */
+.offer-card{position:relative;overflow:hidden;border-color:rgba(var(--accent-rgb),.55);
+  background:linear-gradient(180deg,rgba(var(--accent-rgb),.07),rgba(var(--accent-rgb),.015) 55%,transparent),var(--card);
+  box-shadow:0 0 0 1px rgba(var(--accent-rgb),.18),0 30px 90px rgba(0,0,0,.7),0 0 44px -10px rgba(var(--accent-rgb),.3),0 0 130px -34px rgba(var(--accent-rgb),.2)}
+.offer-head{margin-bottom:18px}
+.offer-tag{display:inline-block;font-size:11px;font-weight:600;letter-spacing:.18em;text-transform:uppercase;color:#0B0B0B;background:var(--accent);border-radius:999px;padding:4px 11px;margin-bottom:12px}
+.offer-head h3{font-size:22px;font-weight:600;letter-spacing:-.015em}
+.offer-head p{color:var(--text-dim);font-size:14px;margin-top:5px;max-width:70ch}
+.offer-grid{display:grid;grid-template-columns:minmax(0,1.4fr) minmax(0,1fr) minmax(0,.9fr);gap:20px 24px;align-items:start}
+.offer-main>span{font-size:15px}
+.offer-main .control input{font-size:30px;font-weight:600;letter-spacing:-.02em;padding:16px 84px 16px 50px;border-radius:14px;border-color:rgba(var(--accent-rgb),.5);background:#070707;font-variant-numeric:tabular-nums}
+.offer-main .control .prefix{left:20px;font-size:24px;font-weight:500;color:var(--accent)}
+.offer-main .control .unit{right:20px;font-size:14px}
+.offer-main .control input:focus{border-color:var(--accent);box-shadow:0 0 0 4px rgba(var(--accent-rgb),.18),0 10px 30px rgba(0,0,0,.5)}
+.offer-side{display:flex;flex-direction:column;gap:4px;padding:2px 0 0 22px;border-left:1px solid var(--line)}
+.offer-side span{font-size:11.5px;font-weight:600;letter-spacing:.12em;text-transform:uppercase;color:var(--text-dim)}
+.offer-side b{font-size:26px;font-weight:600;letter-spacing:-.02em;font-variant-numeric:tabular-nums;margin-top:6px}
+.offer-side small{font-size:12px;color:var(--text-faint);line-height:1.4}
+
+/* the activities sheet, folded into Inputs */
+.fold-tag{font-size:11px;color:var(--text-dim);border:1px solid var(--input-border);border-radius:999px;padding:3px 9px;white-space:nowrap}
+.fold-intro{margin:0 24px 14px;color:var(--text-dim);font-size:13px;line-height:1.5;max-width:90ch}
+.fold-card .table-wrap{margin:0 16px 6px;padding:0 8px}
+.how-inner{margin:8px 24px 18px;border-top:1px solid var(--line);padding-top:10px}
+.how-inner summary{cursor:pointer;list-style:none;font-size:12.5px;color:var(--text-dim);display:inline-flex;align-items:center;gap:7px;user-select:none}
+.how-inner summary::-webkit-details-marker{display:none}
+.how-inner summary::before{content:"";width:6px;height:6px;border-right:1.5px solid currentColor;border-bottom:1.5px solid currentColor;transform:rotate(-45deg);transition:transform .15s}
+.how-inner[open] summary::before{transform:rotate(45deg)}
+.how-inner[open] summary,.how-inner summary:hover{color:#fff}
+.how-card .how-inner .how-list{margin:8px 0 0;padding:0;font-size:12.5px}
+
 /* scenario tiles */
 .scen-block{display:flex;flex-direction:column;gap:14px}
 .scen-block-head h3{font-size:17px;font-weight:600;letter-spacing:-.01em}
@@ -363,6 +408,8 @@ tr.mech-row td{border-top:none;padding:0 10px 14px;background:rgba(255,255,255,.
 /* ---------- responsive ---------- */
 @media (max-width:980px){
   .kpis{grid-template-columns:repeat(2,minmax(0,1fr))}
+  .offer-grid{grid-template-columns:1fr 1fr}
+  .offer-main{grid-column:span 2}
   .mod-tiles{grid-template-columns:repeat(3,minmax(0,1fr))}
   .st-stats b{font-size:16px}
   .grid-3{grid-template-columns:repeat(2,minmax(0,1fr))}
@@ -384,6 +431,14 @@ tr.mech-row td{border-top:none;padding:0 10px 14px;background:rgba(255,255,255,.
   .kpis{grid-template-columns:1fr 1fr;gap:10px}
   .kpi{padding:16px}
   .scen-tiles{grid-template-columns:1fr;gap:10px}
+  .offer-grid{grid-template-columns:1fr}
+  .offer-side{border-left:none;border-top:1px solid var(--line);padding:14px 0 0}
+  .offer-main .control input{font-size:24px;padding:14px 70px 14px 44px}
+  .offer-head h3{font-size:19px}
+  .fold-intro{margin:0 18px 12px}
+  .fold-card .table-wrap{margin:0 10px 6px}
+  .how-inner{margin:8px 18px 16px}
+  .fold-tag{display:none}
   .mod-tiles{grid-template-columns:repeat(2,minmax(0,1fr));gap:8px}
   .mod-tile{min-height:0;padding:14px 14px 10px}
   .how-card summary{padding:14px 18px}
@@ -475,9 +530,8 @@ tr.mech-row td{border-top:none;padding:0 10px 14px;background:rgba(255,255,255,.
   .kpi.glow{animation:glow .9s ease-out}
 
   /* the step pill slides instead of jumping */
-  .steps::before{content:"";position:absolute;top:var(--pad,5px);bottom:var(--pad,5px);left:var(--pad,5px);width:calc((100% - 2 * var(--pad,5px) - 2 * var(--gap,6px)) / 3);background:var(--accent);border-radius:9px;transition:transform .38s cubic-bezier(.22,.9,.25,1)}
-  .steps[data-view="activities"]::before{transform:translateX(calc(100% + var(--gap,6px)))}
-  .steps[data-view="results"]::before{transform:translateX(calc(200% + 2 * var(--gap,6px)))}
+  .steps::before{content:"";position:absolute;top:var(--pad,5px);bottom:var(--pad,5px);left:var(--pad,5px);width:calc((100% - 2 * var(--pad,5px) - var(--gap,6px)) / 2);background:var(--accent);border-radius:9px;transition:transform .38s cubic-bezier(.22,.9,.25,1)}
+  .steps[data-view="results"]::before{transform:translateX(calc(100% + var(--gap,6px)))}
   .step[aria-selected="true"]{background:transparent}
   .step{transition:color .22s,transform .22s}
   .step::after{content:"";position:absolute;inset:0;border-radius:9px;z-index:-1;background:rgba(255,255,255,.06);opacity:0;transform:scale(.9);transition:opacity .22s,transform .28s cubic-bezier(.22,.8,.25,1)}
@@ -591,6 +645,9 @@ tr.mech-row td{border-top:none;padding:0 10px 14px;background:rgba(255,255,255,.
 
   .ripple{animation:ripple .65s cubic-bezier(.22,.8,.25,1) forwards}
   .scen-tile{transition:border-color .25s,background .35s,box-shadow .35s,transform .3s cubic-bezier(.22,.8,.25,1)}
+  @keyframes offer-pulse{0%,100%{box-shadow:0 0 0 0 rgba(var(--accent-rgb),.0)}50%{box-shadow:0 0 0 6px rgba(var(--accent-rgb),.10)}}
+  .offer-main .control input:not(:focus){animation:offer-pulse 2.8s ease-in-out 1.2s 3}
+  .fold-card[open] .fold-intro,.fold-card[open] .table-wrap{animation:rise .35s cubic-bezier(.22,.9,.25,1)}
   .mod-tile{transition:border-color .25s,background .3s,box-shadow .3s,transform .25s cubic-bezier(.22,.8,.25,1)}
   .mod-tile:not(.is-locked):hover{transform:translateY(-2px)}
   .mt-check{transition:background .25s,border-color .25s}

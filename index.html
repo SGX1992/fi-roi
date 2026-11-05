@@ -11,7 +11,7 @@
 <meta property="og:description" content="What does sustainability management cost you today – and how much time and money could Footprint Intelligence save?">
 <meta property="og:url" content="https://roi.footprint-intelligence.com/">
 <link rel="icon" href="assets/img/favicon.png">
-<link rel="stylesheet" href="assets/css/style.css?v=12">
+<link rel="stylesheet" href="assets/css/style.css?v=13">
 </head>
 <body>
 <div class="gate" id="gate" hidden>
@@ -56,16 +56,32 @@
 
   <nav class="steps no-print" role="tablist" aria-label="Steps">
     <button class="step" role="tab" id="tab-inputs" aria-controls="view-inputs" aria-selected="true" data-view="inputs" type="button"><i>1</i>Inputs</button>
-    <button class="step" role="tab" id="tab-activities" aria-controls="view-activities" aria-selected="false" data-view="activities" type="button"><i>2</i>Activities</button>
-    <button class="step" role="tab" id="tab-results" aria-controls="view-results" aria-selected="false" data-view="results" type="button"><i>3</i>Results</button>
+    <button class="step" role="tab" id="tab-results" aria-controls="view-results" aria-selected="false" data-view="results" type="button"><i>2</i>Results</button>
   </nav>
 
   <!-- ===================== STEP 1: INPUTS ===================== -->
   <section class="view" id="view-inputs" role="tabpanel" aria-labelledby="tab-inputs">
     <div class="view-head">
       <div>
-        <h2>Step 1 of 3 – Inputs</h2>
+        <h2>Step 1 of 2 – Inputs</h2>
         <p>Enter your figures in the marked fields; everything else is calculated. All defaults are typical values and can be changed.</p>
+      </div>
+    </div>
+
+    <div class="card offer-card">
+      <div class="offer-head">
+        <span class="offer-tag">Your offer</span>
+        <h3>Footprint Intelligence subscription</h3>
+        <p>Enter the annual price from your individual offer. Every result is measured against this investment.</p>
+      </div>
+      <div class="offer-grid">
+        <label class="field offer-main"><span>Annual subscription (as per your offer)</span>
+          <div class="control is-input has-prefix has-unit"><span class="prefix">€</span><input type="number" data-k="fiSubscription" min="0" step="500" inputmode="numeric" aria-describedby="offerHint"><span class="unit">/ year</span></div>
+          <small id="offerHint">Price according to your individual offer</small></label>
+        <label class="field"><span>One-time implementation / onboarding fee</span>
+          <div class="control is-input has-prefix"><span class="prefix">€</span><input type="number" data-k="oneTime.fee" min="0" step="500" inputmode="numeric"></div>
+          <small>Only if part of your offer; counted once in year 1</small></label>
+        <div class="offer-side"><span>Investment over 3 years</span><b id="offerInvest"></b><small>3 × subscription + one-time transition costs</small></div>
       </div>
     </div>
 
@@ -84,10 +100,12 @@
         <label class="field"><span>Data collection rounds per year</span>
           <div class="control is-input"><select data-k="rounds" id="roundsSel"></select></div>
           <small>1 = annual, 2 = semi-annual, 4 = quarterly, 12 = monthly</small></label>
-        <label class="field span-2"><span>Scenario shown in headline results</span>
-          <div class="control is-input"><select data-k="scenario" id="scenarioSel"></select></div>
-          <small>Conservative / Expected / Optimistic – all three are compared on the Results page</small></label>
       </div>
+    </div>
+
+    <div class="scen-block">
+      <div class="scen-block-head"><h3>Scenario shown in headline results</h3><p>Conservative and Optimistic scale the expected time reductions. All three are compared on the Results page.</p></div>
+      <div class="scen-tiles" id="scenTiles2" role="radiogroup" aria-label="Scenario"></div>
     </div>
 
     <div class="card">
@@ -158,44 +176,9 @@
       </div>
     </div>
 
-    <details class="card card--compact how-card">
-      <summary><span class="how-title">How the calculation works</span><span class="how-hint">7 formulas · colour legend</span><i aria-hidden="true"></i></summary>
-      <div class="how">
-        <div><b>Cost per hour</b><span>Avg. gross salary × (1 + employer on-costs) ÷ productive hours per year</span></div>
-        <div><b>Time value saved</b><span>(Hours today − hours with FI) × cost per hour, per activity</span></div>
-        <div><b>Current annual cost</b><span>Internal staff time + software + factor databases + external services</span></div>
-        <div><b>Annual cost with FI</b><span>Remaining internal time + FI subscription + remaining external costs</span></div>
-        <div><b>Year-1 net benefit</b><span>Time value × ramp-up share + cash savings − FI subscription − one-time transition costs</span></div>
-        <div><b>3-year ROI</b><span>(3-year cost today − 3-year cost with FI) ÷ 3-year cost with FI</span></div>
-        <div><b>Payback</b><span>First month in which the cumulative net benefit turns positive</span></div>
-      </div>
-      <div class="legend-colours">
-        <span><i class="in"></i>Input – enter or change these values</span>
-        <span><i class="calc"></i>Calculated – formulas, nothing to change</span>
-        <span><i class="bench"></i>Benchmark – typical default values, driven by your inputs</span>
-      </div>
-    </details>
-
-    <div class="no-print" style="display:flex;justify-content:flex-end">
-      <button class="cta" type="button" data-goto="activities">Next: review activities <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14m-6-6 6 6-6 6"/></svg></button>
-    </div>
-  </section>
-
-  <!-- ===================== STEP 2: ACTIVITIES ===================== -->
-  <section class="view" id="view-activities" role="tabpanel" aria-labelledby="tab-activities" hidden>
-    <div class="view-head">
-      <div>
-        <h2>Step 2 of 3 – Activities</h2>
-        <p>Hours today are benchmarks driven by your inputs. Overwrite them in the “Your estimate” field, and adjust who does the work and the expected reduction if needed.</p>
-      </div>
-    </div>
-
-    <div class="scen-block">
-      <div class="scen-block-head"><h3>Choose the scenario</h3><p>The reductions per activity are the “Expected” case; Conservative and Optimistic scale them. The results of all three are compared on the Results page.</p></div>
-      <div class="scen-tiles" id="scenTiles2" role="radiogroup" aria-label="Scenario"></div>
-    </div>
-
-    <div class="card">
+    <details class="card card--compact how-card fold-card" id="actFold">
+      <summary><span class="how-title">Activities &amp; time savings</span><span class="how-hint" id="actSummary"></span><span class="fold-tag">Optional detail</span><i aria-hidden="true"></i></summary>
+      <p class="fold-intro">Hours today are benchmarks driven by your inputs. Overwrite them in “Your estimate”, and adjust who does the work and the expected reduction where you know better. Leave it closed to use the benchmarks.</p>
       <div class="table-wrap">
         <table id="actTable">
           <thead><tr>
@@ -215,11 +198,9 @@
           <tfoot></tfoot>
         </table>
       </div>
-    </div>
-
-    <details class="card card--compact how-card">
-      <summary><span class="how-title">How to read this table</span><span class="how-hint">benchmarks, estimates, scenarios, applied reduction</span><i aria-hidden="true"></i></summary>
-      <ul class="prose how-list">
+      <details class="how-inner">
+        <summary>How to read this table</summary>
+        <ul class="prose how-list">
         <li>Benchmark hours = fixed hours + hours per unit × units. Units come from your Inputs (e.g. 10 locations × 1 round = 10 units). Open “Benchmark” under an activity to see how its hours are built.</li>
         <li>If you know your actual effort, enter it in “Your estimate” – it replaces the benchmark. Activities outside the selected modules count as 0.</li>
         <li>Expected reductions reflect what remains with FI: preparation, review, exception handling and administration. Human review and approval remain part of every workflow.</li>
@@ -227,14 +208,33 @@
         <li>Saved hours are released capacity. They only reduce cash costs if they replace staffing or external spend.</li>
         <li>Only the “Expected” reduction is entered per activity. Conservative and Optimistic apply the scenario factors <span id="factorNote"></span> (capped at 95%).</li>
       </ul>
+      </details>
     </details>
 
-    <div class="no-print" style="display:flex;justify-content:flex-end;gap:12px;flex-wrap:wrap">
+    <details class="card card--compact how-card">
+      <summary><span class="how-title">How the calculation works</span><span class="how-hint">7 formulas · colour legend</span><i aria-hidden="true"></i></summary>
+      <div class="how">
+        <div><b>Cost per hour</b><span>Avg. gross salary × (1 + employer on-costs) ÷ productive hours per year</span></div>
+        <div><b>Time value saved</b><span>(Hours today − hours with FI) × cost per hour, per activity</span></div>
+        <div><b>Current annual cost</b><span>Internal staff time + software + factor databases + external services</span></div>
+        <div><b>Annual cost with FI</b><span>Remaining internal time + FI subscription + remaining external costs</span></div>
+        <div><b>Year-1 net benefit</b><span>Time value × ramp-up share + cash savings − FI subscription − one-time transition costs</span></div>
+        <div><b>3-year ROI</b><span>(3-year cost today − 3-year cost with FI) ÷ 3-year cost with FI</span></div>
+        <div><b>Payback</b><span>First month in which the cumulative net benefit turns positive</span></div>
+      </div>
+      <div class="legend-colours">
+        <span><i class="in"></i>Input – enter or change these values</span>
+        <span><i class="calc"></i>Calculated – formulas, nothing to change</span>
+        <span><i class="bench"></i>Benchmark – typical default values, driven by your inputs</span>
+      </div>
+    </details>
+
+    <div class="no-print" style="display:flex;justify-content:flex-end">
       <button class="cta" type="button" data-goto="results">See results <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14m-6-6 6 6-6 6"/></svg></button>
     </div>
   </section>
 
-  <!-- ===================== STEP 3: RESULTS ===================== -->
+  <!-- ===================== STEP 2: RESULTS ===================== -->
   <section class="view" id="view-results" role="tabpanel" aria-labelledby="tab-results" hidden>
     <div class="view-head">
       <div>
@@ -361,7 +361,7 @@
     <p class="disclaimer">This calculator provides an indicative estimate based on your inputs and typical benchmarks. It is not a binding offer or a guarantee of savings. Footprint Intelligence pricing is based on your individual offer.</p>
 
     <div class="no-print" style="display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap">
-      <button class="cta cta--ghost" type="button" data-goto="activities"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M19 12H5m6 6-6-6 6-6"/></svg> Back to activities</button>
+      <button class="cta cta--ghost" type="button" data-goto="inputs"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M19 12H5m6 6-6-6 6-6"/></svg> Back to inputs</button>
       <a class="cta" href="https://www.footprint-intelligence.com/contact" target="_blank" rel="noopener" style="border:none">Discuss your business case with us</a>
     </div>
   </section>
@@ -390,6 +390,6 @@
 </div>
 <div class="toast" id="toast" role="status" aria-live="polite"></div>
 
-<script type="module" src="assets/js/app.js?v=12"></script>
+<script type="module" src="assets/js/app.js?v=13"></script>
 </body>
 </html>

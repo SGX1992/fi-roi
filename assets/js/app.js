@@ -176,7 +176,6 @@ function fillSelect(sel, options, numeric) {
 }
 fillSelect($('#approachSel'), APPROACHES);
 fillSelect($('#roundsSel'), ROUNDS, true);
-fillSelect($('#scenarioSel'), SCENARIOS);
 
 /* modules as tiles that switch on and off; Core is shown too, locked on */
 const MODULE_DESC = {
@@ -258,8 +257,8 @@ extBody.append(el('tr', {}, [
   el('td', { class: 'cell-main', text: 'Footprint Intelligence annual subscription (as per your offer)' }),
   el('td', { class: 'r calc', text: '–' }),
   el('td', { class: 'r calc' }),
-  el('td', { class: 'r' }, numberControl('fiSubscription', { step: 500, prefix: '€' })),
-  el('td', { class: 'cell-sub', text: 'Price according to your individual offer' }),
+  extFiCell,
+  el('td', { class: 'cell-sub', text: 'Entered under “Your offer” at the top' }),
 ]));
 const extTodayTotal = el('td', { class: 'r' }), extWithFITotal = el('td', { class: 'r' });
 extBody.append(el('tr', { class: 'total' }, [el('td', { text: 'Total annual external costs' }), extTodayTotal, el('td'), extWithFITotal, el('td')]));
@@ -274,7 +273,9 @@ const oneCells = [];
 const oneBody = $('#oneTimeTable tbody');
 ONE.forEach(([name, path, opts, note]) => {
   const cost = el('td', { class: 'r calc' }); oneCells.push(cost);
-  oneBody.append(el('tr', {}, [el('td', { class: 'cell-main', text: name }), el('td', { class: 'r' }, numberControl(path, opts)), cost, el('td', { class: 'cell-sub', text: note })]));
+  /* the onboarding fee is entered in the offer card; here it only shows as a cost */
+  const inputCell = path === 'oneTime.fee' ? el('td', { class: 'r calc', text: 'see “Your offer”' }) : el('td', { class: 'r' }, numberControl(path, opts));
+  oneBody.append(el('tr', {}, [el('td', { class: 'cell-main', text: name }), inputCell, cost, el('td', { class: 'cell-sub', text: note })]));
 });
 const oneTotal = el('td', { class: 'r' });
 oneBody.append(el('tr', { class: 'total' }, [el('td', { text: 'Total one-time transition costs' }), el('td'), oneTotal, el('td')]));
@@ -288,8 +289,8 @@ ACTIVITIES.forEach((a, i) => {
   const estimate = numberControl(`activities.${i}.estimate`, { step: 10, unit: 'h' });
   const estInput = $('input', estimate); estInput.dataset.nullable = ''; estInput.title = 'Your estimate (hours / year, optional) – replaces the benchmark';
   const c = {
-    scope: el('span', { class: 'pill' }),
-    benchLine: el('span', { class: 'bench' }),
+    scope: el('span', { class: 'scope-dot' }),
+    benchLine: el('span', { class: 'sr-only' }),
     mech: el('div', { class: 'mech-body' }),
     applied: el('td', { class: 'r calc' }), withFI: el('td', { class: 'r calc' }), saved: el('td', { class: 'r calc strong' }),
     rate: el('td', { class: 'r calc' }), value: el('td', { class: 'r calc strong' }),
@@ -302,10 +303,10 @@ ACTIVITIES.forEach((a, i) => {
   } }, [c.benchLine]);
   c.tr = el('tr', {}, [
     el('td', { class: 'calc', text: a.n }),
-    el('td', {}, [el('span', { class: 'cell-main', text: a.name }), el('span', { class: 'cell-sub', text: a.how })]),
-    el('td', {}, [el('span', { class: 'cell-sub', text: a.module, style: 'margin:0 0 4px' }), c.scope]),
+    el('td', { title: a.how }, [el('span', { class: 'cell-main', text: a.name })]),
+    el('td', {}, el('span', { class: 'mod-cell' }, [c.scope, el('span', { text: a.module })])),
     el('td', {}, el('div', { class: 'control is-input' }, doneBy)),
-    el('td', { class: 'r' }, [estimate, el('div', { style: 'margin-top:6px;text-align:right' }, toggle)]),
+    el('td', { class: 'r' }, el('div', { class: 'est-wrap' }, [estimate, toggle])),
     el('td', { class: 'r' }, numberControl(`activities.${i}.expected`, { pct: true, max: 100, unit: '%' })),
     c.applied, c.withFI, c.saved, c.rate, c.value,
   ]);
@@ -399,6 +400,8 @@ function update() {
   m.roles.forEach((r, i) => setText(roleCells[i], `€${r.costPerHour.toFixed(2)}`));
   m.ext.forEach((e, i) => setText(extCells[i], fmtEur(e.withFI)));
   setText(extTodayTotal, fmtEur(m.extTodayTotal)); setText(extWithFITotal, fmtEur(m.extWithFITotal));
+  setText(extFiCell, fmtEur(m.fiSubscription));
+  setNum($('#offerInvest'), m.selected.invest3y, fmtEur);   // Calculations!F46
   [m.oneTime.fee, m.oneTime.migration, m.oneTime.parallel, m.oneTime.training].forEach((v, i) => setText(oneCells[i], fmtEur(v)));
   setText(oneTotal, fmtEur(m.oneTime.total));
 
@@ -406,20 +409,24 @@ function update() {
   m.activities.forEach((a, i) => {
     const c = actRows[i];
     c.tr.classList.toggle('out', a.inScope !== 'Yes');
-    c.scope.textContent = a.inScope === 'Yes' ? 'In scope' : 'Not in scope';
-    c.scope.className = `pill ${a.inScope === 'Yes' ? 'on' : 'off'}`;
+    c.scope.title = a.inScope === 'Yes' ? 'In scope' : 'Not in scope – module not selected';
+    c.scope.className = `scope-dot ${a.inScope === 'Yes' ? 'on' : 'off'}`;
     c.estInput.placeholder = fmtInt(a.benchmark);
-    c.benchLine.innerHTML = `Benchmark <b>${fmtInt(a.benchmark)} h</b>${a.estimate !== null ? ' · overridden' : ''}`;
+    c.benchLine.textContent = `Benchmark ${fmtInt(a.benchmark)} h${a.estimate !== null ? ', overridden by your estimate' : ''} – show how it is built`;
+    c.benchLine.parentElement.title = `Benchmark ${fmtInt(a.benchmark)} h${a.estimate !== null ? ' (overridden)' : ''} – show how it is built`;
+    c.benchLine.parentElement.classList.toggle('is-overridden', a.estimate !== null);
     c.mech.innerHTML = `<span><em>How the benchmark is built</em></span><span>Fixed hours / year <b>${fmtInt(a.fixed)}</b></span><span>Hours per unit <b>${fmtInt(a.perUnit)}</b></span><span>Driver <b>${a.driver}</b></span><span>Units from your inputs <b>${fmtInt(a.units)}</b></span><span>Benchmark <b>${fmtInt(a.fixed)} + ${fmtInt(a.perUnit)} × ${fmtInt(a.units)} = ${fmtInt(a.benchmark)} h</b></span><span>Conservative / Optimistic reduction <b>${fmtPct(a.conservative)} / ${fmtPct(a.optimistic)}</b></span>`;
     setText(c.applied, fmtPct(a.applied)); setText(c.withFI, fmtInt(a.withFI)); setText(c.saved, fmtInt(a.saved));
     setText(c.rate, `€${a.costPerHour.toFixed(2)}`); setText(c.value, fmtEur(a.value));
   });
   setText(actTot.today, fmtInt(m.totals.today)); setText(actTot.applied, fmtPct(m.totals.applied));
   setText(actTot.withFI, fmtInt(m.totals.withFI)); setText(actTot.saved, fmtInt(m.totals.saved)); setText(actTot.value, fmtEur(m.totals.value));
+  const overridden = m.activities.filter(a => a.estimate !== null).length;
+  $('#actSummary').textContent = `${fmtInt(m.totals.today)} h today → ${fmtInt(m.totals.withFI)} h with FI · ${fmtInt(m.totals.saved)} h saved · ${fmtEur(m.totals.value)} / year` + (overridden ? ` · ${overridden} own estimate${overridden > 1 ? 's' : ''}` : '');
 
   /* step 3 – headline */
   $('#resTitle').textContent = `Business case: Footprint Intelligence for ${state.company || 'your company'}`;
-  $('#resSub').textContent = `Compared with today's approach (${state.approach})  ·  Scenario: ${state.scenario}  ·  Step 3 of 3 – Results`;
+  $('#resSub').textContent = `Compared with today's approach (${state.approach})  ·  Scenario: ${state.scenario}  ·  Step 2 of 2 – Results`;
   const h = m.headline;
   setNum($('#kHours'), h.hoursSaved, fmtHours);
   $('#kHoursSub').textContent = `${fmtInt(h.workingDays)} working days  ·  ${fmt1(h.fte)} FTE`;
@@ -673,6 +680,7 @@ function drawHoursChart() {
 
 /* ---------- views ---------- */
 function showView(name, { scroll = true } = {}) {
+  if (name !== 'results') name = 'inputs';   // the old Activities step now lives inside Inputs
   currentView = name;
   for (const v of $$('.view')) {
     const on = v.id === `view-${name}`;
